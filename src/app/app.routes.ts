@@ -11,12 +11,19 @@ export const routes: Routes = [
     loadComponent: () => import('./components/home/home.component').then(m => m.HomeComponent)
   },
   {
+    path: 'auth',
+    loadComponent: () => import('./components/auth/auth.component').then(m => m.AuthComponent)
+  },
+  // Redirect old routes to new auth component
+  {
     path: 'login',
-    loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent)
+    redirectTo: '/auth',
+    pathMatch: 'full'
   },
   {
     path: 'register',
-    loadComponent: () => import('./components/register/register.component').then(m => m.RegisterComponent)
+    redirectTo: '/auth',
+    pathMatch: 'full'
   },
   {
     path: '**',

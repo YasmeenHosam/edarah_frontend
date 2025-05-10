@@ -1,7 +1,7 @@
 <nav class="navbar">
   <div class="navbar-container">
     <a routerLink="/" class="navbar-logo">
-      <img src="/assets/images/edarah-logo.svg" alt="Edarah Logo">
+      <img src="/assets/images/logo.png" alt="Edarah Logo">
       <span>Edarah</span>
     </a>
 
@@ -24,8 +24,8 @@
           </div>
         </div>
       } @else {
-        <a routerLink="/login" class="btn btn-login">Sign In</a>
-        <a routerLink="/register" class="btn btn-register">Get Started</a>
+        <a routerLink="/auth" [queryParams]="{tab: 'signin'}" class="btn btn-login">Sign In</a>
+        <a routerLink="/auth" [queryParams]="{tab: 'signup'}" class="btn btn-register">Get Started</a>
       }
     </div>
   </div>

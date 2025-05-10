@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 
 interface PricingPlan {
   name: string;
@@ -27,6 +27,8 @@ interface Feature {
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
+
+  constructor(private router: Router) {}
   
   features: Feature[] = [
     {
@@ -123,8 +125,8 @@ export class HomeComponent {
   }
 
   onGetStarted() {
-    // Navigate to registration or login
-    console.log('Get started clicked');
+    // Navigate to auth page with signup tab
+    this.router.navigate(['/auth'], { queryParams: { tab: 'signup' } });
   }
 
   onContactUs() {
