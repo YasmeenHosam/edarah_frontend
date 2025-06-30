@@ -1,0 +1,16 @@
+This is a placeholder for the Edarah logo.
+
+Please save the Edarah logo image as "edarah-logo.png" in this directory.
+
+The logo should be:
+- PNG format with transparent background
+- Recommended size: 200x200 pixels or larger
+- Square aspect ratio for best results
+
+The logo will be used in:
+- Navigation bar (40x40px)
+- Login page (80x80px) 
+- Registration page (80x80px)
+- Footer (50x50px)
+
+Make sure the logo is optimized for web use and has good contrast for both light and dark backgrounds.

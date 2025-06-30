@@ -1,0 +1,222 @@
+<div class="register-container">
+  <div class="register-card">
+    <!-- Logo Section -->
+    <div class="logo-section">
+      <img src="/assets/images/edarah-logo.svg" alt="Edarah" class="logo">
+      <h1>Create Account</h1>
+      <p>Join Edarah to access powerful AI services</p>
+    </div>
+
+    <!-- Registration Form -->
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+      <!-- Name Fields -->
+      <div class="name-row">
+        <div class="form-group">
+          <label for="firstName">First Name</label>
+          <input
+            type="text"
+            id="firstName"
+            formControlName="firstName"
+            placeholder="Enter first name"
+            [class.error]="firstName?.invalid && firstName?.touched"
+          >
+          @if (firstName?.invalid && firstName?.touched) {
+            <div class="error-message">
+              {{ getFieldError('firstName') }}
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="lastName">Last Name</label>
+          <input
+            type="text"
+            id="lastName"
+            formControlName="lastName"
+            placeholder="Enter last name"
+            [class.error]="lastName?.invalid && lastName?.touched"
+          >
+          @if (lastName?.invalid && lastName?.touched) {
+            <div class="error-message">
+              {{ getFieldError('lastName') }}
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Email Field -->
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <div class="input-wrapper">
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            placeholder="Enter your email"
+            [class.error]="email?.invalid && email?.touched"
+          >
+          <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
+        </div>
+        @if (email?.invalid && email?.touched) {
+          <div class="error-message">
+            {{ getFieldError('email') }}
+          </div>
+        }
+      </div>
+
+      <!-- Phone Number Field -->
+      <div class="form-group">
+        <label for="phoneNumber">Phone Number</label>
+        <div class="input-wrapper">
+          <input
+            type="tel"
+            id="phoneNumber"
+            formControlName="phoneNumber"
+            placeholder="Enter your phone number"
+            [class.error]="phoneNumber?.invalid && phoneNumber?.touched"
+          >
+          <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+          </svg>
+        </div>
+        @if (phoneNumber?.invalid && phoneNumber?.touched) {
+          <div class="error-message">
+            {{ getFieldError('phoneNumber') }}
+          </div>
+        }
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-wrapper">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            formControlName="password"
+            placeholder="Create a password"
+            [class.error]="password?.invalid && password?.touched"
+          >
+          <button
+            type="button"
+            class="password-toggle"
+            (click)="togglePasswordVisibility()"
+            aria-label="Toggle password visibility"
+          >
+            @if (!showPassword) {
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            } @else {
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                <line x1="1" y1="1" x2="23" y2="23"></line>
+              </svg>
+            }
+          </button>
+        </div>
+        
+        <!-- Password Strength Indicator -->
+        @if (password?.value) {
+          <div class="password-strength">
+            <div class="strength-bar">
+              <div class="strength-fill" [class]="getPasswordStrength()"></div>
+            </div>
+            <span class="strength-text" [class]="getPasswordStrength()">
+              {{ getPasswordStrength() | titlecase }} password
+            </span>
+          </div>
+        }
+        
+        @if (password?.invalid && password?.touched) {
+          <div class="error-message">
+            {{ getFieldError('password') }}
+          </div>
+        }
+      </div>
+
+      <!-- Confirm Password Field -->
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <div class="input-wrapper">
+          <input
+            [type]="showConfirmPassword ? 'text' : 'password'"
+            id="confirmPassword"
+            formControlName="confirmPassword"
+            placeholder="Confirm your password"
+            [class.error]="confirmPassword?.invalid && confirmPassword?.touched"
+          >
+          <button
+            type="button"
+            class="password-toggle"
+            (click)="toggleConfirmPasswordVisibility()"
+            aria-label="Toggle confirm password visibility"
+          >
+            @if (!showConfirmPassword) {
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            } @else {
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                <line x1="1" y1="1" x2="23" y2="23"></line>
+              </svg>
+            }
+          </button>
+        </div>
+        @if (confirmPassword?.invalid && confirmPassword?.touched) {
+          <div class="error-message">
+            {{ getFieldError('confirmPassword') }}
+          </div>
+        }
+      </div>
+
+      <!-- Terms and Conditions -->
+      <div class="form-group">
+        <label class="checkbox-wrapper">
+          <input type="checkbox" formControlName="agreeToTerms">
+          <span class="checkmark"></span>
+          I agree to the <a href="#" class="link">Terms of Service</a> and <a href="#" class="link">Privacy Policy</a>
+        </label>
+        @if (agreeToTerms?.invalid && agreeToTerms?.touched) {
+          <div class="error-message">
+            {{ getFieldError('agreeToTerms') }}
+          </div>
+        }
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="submit-btn"
+        [disabled]="isSubmitting"
+        [class.loading]="isSubmitting"
+      >
+        @if (!isSubmitting) {
+          <span>Create Account</span>
+        } @else {
+          <span class="loading-text">
+            <svg class="spinner" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="31.416" stroke-dashoffset="31.416">
+                <animate attributeName="stroke-dasharray" dur="2s" values="0 31.416;15.708 15.708;0 31.416" repeatCount="indefinite"/>
+                <animate attributeName="stroke-dashoffset" dur="2s" values="0;-15.708;-31.416" repeatCount="indefinite"/>
+              </circle>
+            </svg>
+            Creating account...
+          </span>
+        }
+      </button>
+
+      <!-- Login Link -->
+      <div class="login-link">
+        Already have an account? 
+        <a routerLink="/login" class="link">Sign in here</a>
+      </div>
+    </form>
+  </div>
+</div>
