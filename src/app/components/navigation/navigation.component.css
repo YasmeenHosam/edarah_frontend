@@ -1,9 +1,10 @@
 .navbar {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 0.5rem 2rem;
-  position: sticky;
+  background: #1E3A8A;
+  padding: 16px 0;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 1000;
   font-family: 'Inter', sans-serif;
 }
@@ -12,38 +13,37 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
+  padding: 0 40px;
 }
 
 .navbar-logo {
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: #1a1a1a;
-  font-size: 1.5rem;
-  font-weight: 600;
 }
 
-.navbar-logo img {
+.nav-logo {
+  width: 40px;
   height: 40px;
-  margin-right: 0.5rem;
 }
 
 .navbar-links {
   display: flex;
-  gap: 2rem;
+  gap: 40px;
 }
 
 .nav-link {
   text-decoration: none;
-  color: #555;
-  font-weight: 500;
+  color: white;
+  font-weight: 400;
+  font-size: 16px;
   transition: color 0.3s ease;
 }
 
 .nav-link:hover {
-  color: #007bff;
+  color: #93C5FD;
 }
 
 .navbar-actions {
@@ -53,32 +53,34 @@
 }
 
 .btn {
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
+  padding: 8px 16px;
+  border-radius: 6px;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 500;
+  font-size: 14px;
   transition: all 0.3s ease;
+  border: 1px solid transparent;
 }
 
 .btn-login {
   background-color: transparent;
-  color: #007bff;
-  border: 1px solid #007bff;
+  color: white;
+  border: 1px solid white;
 }
 
 .btn-login:hover {
-  background-color: #007bff;
-  color: #fff;
+  background-color: white;
+  color: #1E3A8A;
 }
 
 .btn-register {
-  background-color: #007bff;
-  color: #fff;
-  border: 1px solid #007bff;
+  background-color: white;
+  color: #1E3A8A;
+  border: 1px solid white;
 }
 
 .btn-register:hover {
-  background-color: #0056b3;
+  background-color: rgba(255, 255, 255, 0.9);
 }
 
 .user-menu {
@@ -94,7 +96,7 @@
   gap: 0.5rem;
   font-size: 1rem;
   font-weight: 500;
-  color: #333;
+  color: white;
 }
 
 .chevron-down {
@@ -130,4 +132,34 @@
 
 .dropdown-item:hover {
   background-color: #f0f0f0;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .navbar-container {
+    padding: 0 20px;
+  }
+
+  .navbar-links {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-links {
+    display: none;
+  }
+
+  .navbar-container {
+    padding: 0 16px;
+  }
+
+  .navbar-actions {
+    gap: 8px;
+  }
+
+  .btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
 }

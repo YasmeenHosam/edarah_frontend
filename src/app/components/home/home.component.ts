@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
 
 interface PricingPlan {
@@ -8,6 +9,7 @@ interface PricingPlan {
   period: string;
   description: string;
   features: string[];
+  negativeFeatures?: string[];
   isPopular?: boolean;
   buttonText: string;
   buttonClass: string;
@@ -19,14 +21,34 @@ interface Feature {
   description: string;
 }
 
+interface ContactData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  subject: string;
+  message: string;
+}
+
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, FormsModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent {
+export class HomeComponent implements AfterViewInit, OnDestroy {
+  private observer!: IntersectionObserver;
+  showMore = false;
+
+  contactData: ContactData = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    subject: '',
+    message: ''
+  };
 
   constructor(private router: Router) {}
   
@@ -65,54 +87,58 @@ export class HomeComponent {
 
   pricingPlans: PricingPlan[] = [
     {
-      name: 'Starter',
-      price: '$29',
-      period: '/month',
-      description: 'Perfect for individuals and small projects',
+      name: 'Free Plan',
+      price: 'Free',
+      period: '',
+      description: 'Perfect for small stores testing smart recommendations',
       features: [
-        '10,000 API calls/month',
-        'Basic AI models',
-        'Email support',
-        'Standard processing speed',
-        'Basic analytics'
+        'Basic product recommendations',
+        'Limited AI insights',
+        'Alerts for risky products (basic)',
+        'Access to dashboard'
       ],
-      buttonText: 'Get Started',
+      negativeFeatures: [
+        'No AI assistant',
+        'No advanced price suggestions',
+        'No integrations'
+      ],
+      buttonText: 'Start Free Plan',
       buttonClass: 'btn-outline'
     },
     {
-      name: 'Professional',
-      price: '$99',
+      name: 'Pro Plan',
+      price: '$29',
       period: '/month',
-      description: 'Ideal for growing businesses and teams',
+      description: 'Advanced insights to grow your sales and profits',
       features: [
-        '100,000 API calls/month',
-        'Advanced AI models',
-        'Priority support',
-        'Fast processing speed',
-        'Advanced analytics',
-        'Team collaboration',
-        'Custom integrations'
+        'Detailed pricing suggestions',
+        'AI assistant to guide your decisions',
+        'Risk alerts for products losing money',
+        'Smart promotional recommendations',
+        'Access to dashboard & insights'
+      ],
+      negativeFeatures: [
+        'No API access',
+        'No store platform integrations'
       ],
       isPopular: true,
-      buttonText: 'Start Free Trial',
+      buttonText: 'Get Pro Plan',
       buttonClass: 'btn-primary'
     },
     {
-      name: 'Enterprise',
-      price: 'Custom',
-      period: '',
-      description: 'For large organizations with specific needs',
+      name: 'Business Plan',
+      price: '$70',
+      period: '/month',
+      description: 'Full control, automation, and advanced data tools',
       features: [
-        'Unlimited API calls',
-        'All AI models',
-        'Dedicated support',
-        'Fastest processing',
-        'Custom analytics',
-        'Advanced team features',
-        'On-premise deployment',
-        'SLA guarantee'
+        'All Pro features',
+        'API access for automation',
+        'Automatic integration to store',
+        'Advanced reporting & CSV export',
+        'Priority support'
       ],
-      buttonText: 'Contact Sales',
+      negativeFeatures: [],
+      buttonText: 'Get Pro Plan',
       buttonClass: 'btn-outline'
     }
   ];
@@ -134,8 +160,103 @@ export class HomeComponent {
     console.log('Contact us clicked');
   }
 
+  ngAfterViewInit() {
+    this.setupIntersectionObserver();
+    // Add a small delay to ensure DOM is fully rendered
+    setTimeout(() => {
+      this.setupMadeForAnimations();
+    }, 100);
+  }
+
+  ngOnDestroy() {
+    if (this.observer) {
+      this.observer.disconnect();
+    }
+  }
+
+  private setupIntersectionObserver() {
+    const options = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate');
+        }
+      });
+    }, options);
+
+    // Observe all animation elements
+    const animatedElements = document.querySelectorAll('.fade-in-up, .fade-in-left, .fade-in-right');
+    animatedElements.forEach(el => this.observer.observe(el));
+  }
+
+  private setupMadeForAnimations() {
+    // Setup specific animations for Made For section
+    const madeForItems = document.querySelectorAll('.made-for-item');
+
+    const madeForObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // Trigger animations for child elements with delays
+          const featurePoints = entry.target.querySelectorAll('.feature-point');
+          featurePoints.forEach((point, index) => {
+            setTimeout(() => {
+              (point as HTMLElement).style.animationDelay = `${0.2 + index * 0.1}s`;
+              point.classList.add('animate');
+            }, index * 100);
+          });
+        }
+      });
+    }, {
+      threshold: 0.2,
+      rootMargin: '0px 0px -100px 0px'
+    });
+
+    madeForItems.forEach(item => madeForObserver.observe(item));
+
+    // About Us animations
+    const aboutUsItems = document.querySelectorAll('.about-us .fade-in-left, .about-us .fade-in-right');
+    const aboutUsObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate');
+        }
+      });
+    }, {
+      threshold: 0.2,
+      rootMargin: '0px 0px -100px 0px'
+    });
+
+    aboutUsItems.forEach(item => aboutUsObserver.observe(item));
+  }
+
+  toggleReadMore() {
+    this.showMore = !this.showMore;
+  }
+
   onSelectPlan(plan: PricingPlan) {
     console.log('Selected plan:', plan.name);
-    // Handle plan selection
+    // Navigate to auth page or handle plan selection
+    this.router.navigate(['/auth']);
+  }
+
+  onSubmitContact() {
+    console.log('Contact form submitted:', this.contactData);
+    // Here you would typically send the data to your backend
+    // For now, we'll just show a success message and reset the form
+    alert('Thank you for your message! We\'ll get back to you soon.');
+
+    // Reset form
+    this.contactData = {
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      subject: '',
+      message: ''
+    };
   }
 }
