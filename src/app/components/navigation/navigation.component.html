@@ -1,16 +1,14 @@
-<nav class="navbar">
+<nav class="navbar" [class.scrolled]="isScrolled">
   <div class="navbar-container">
     <a routerLink="/" class="navbar-logo">
       <div class="nav-logo">
-        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="40" height="40" rx="8" fill="white"/>
-          <path d="M12 16L20 24L28 16" stroke="#1E3A8A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M12 12H28" stroke="#1E3A8A" stroke-width="2" stroke-linecap="round"/>
-          <path d="M12 28H28" stroke="#1E3A8A" stroke-width="2" stroke-linecap="round"/>
-        </svg>
+        <img src="/assets/images/white_logo.png"
+             alt="Edarah Logo"
+             class="logo-image">
       </div>
     </a>
 
+    <!-- Desktop Navigation -->
     <div class="navbar-links">
       <a href="#home" class="nav-link">Home</a>
       <a href="#features" class="nav-link">Features</a>
@@ -20,22 +18,65 @@
       <a href="#contact" class="nav-link">Contact Us</a>
     </div>
 
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-button" (click)="toggleMobileMenu()">
+      <span class="hamburger-line" [class.active]="isMobileMenuOpen"></span>
+      <span class="hamburger-line" [class.active]="isMobileMenuOpen"></span>
+      <span class="hamburger-line" [class.active]="isMobileMenuOpen"></span>
+    </button>
+
     <div class="navbar-actions">
       @if (currentUser) {
         <div class="user-menu">
-          <button class="user-menu-button">
+          <button class="user-menu-button" (click)="toggleUserMenu()">
             Welcome, {{ currentUser.first_name }}
-            <svg class="chevron-down" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"></path></svg>
+            <svg class="chevron-down" [class.rotated]="isUserMenuOpen" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"></path></svg>
           </button>
-          <div class="user-menu-dropdown">
-            <a routerLink="/profile" class="dropdown-item">Profile</a>
-            <a (click)="logout()" class="dropdown-item">Logout</a>
+          <div class="user-menu-dropdown" [class.active]="isUserMenuOpen">
+            <a routerLink="/profile" class="dropdown-item" (click)="closeUserMenu()">Profile</a>
+            <a (click)="logout(); closeUserMenu()" class="dropdown-item">Logout</a>
           </div>
         </div>
       } @else {
         <a routerLink="/auth" [queryParams]="{tab: 'signin'}" class="btn btn-login">Sign In</a>
         <a routerLink="/auth" [queryParams]="{tab: 'signup'}" class="btn btn-register">Get Started</a>
       }
+    </div>
+  </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu-overlay" [class.active]="isMobileMenuOpen" (click)="closeMobileMenu()">
+    <div class="mobile-menu" (click)="$event.stopPropagation()">
+      <div class="mobile-menu-header">
+        <img src="/assets/images/white_logo.png" alt="Edarah Logo" class="mobile-logo">
+        <button class="mobile-close-button" (click)="closeMobileMenu()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="mobile-menu-links">
+        <a href="#home" class="mobile-nav-link" (click)="closeMobileMenu()">Home</a>
+        <a href="#features" class="mobile-nav-link" (click)="closeMobileMenu()">Features</a>
+        <a href="#why-us" class="mobile-nav-link" (click)="closeMobileMenu()">Why Us?</a>
+        <a href="#preview" class="mobile-nav-link" (click)="closeMobileMenu()">Preview</a>
+        <a href="#about" class="mobile-nav-link" (click)="closeMobileMenu()">About Us</a>
+        <a href="#contact" class="mobile-nav-link" (click)="closeMobileMenu()">Contact Us</a>
+      </div>
+
+      <div class="mobile-menu-actions">
+        @if (currentUser) {
+          <div class="mobile-user-info">
+            <span>Welcome, {{ currentUser.first_name }}</span>
+            <a routerLink="/profile" class="mobile-btn mobile-btn-profile" (click)="closeMobileMenu()">Profile</a>
+            <button (click)="logout(); closeMobileMenu()" class="mobile-btn mobile-btn-logout">Logout</button>
+          </div>
+        } @else {
+          <a routerLink="/auth" [queryParams]="{tab: 'signin'}" class="mobile-btn mobile-btn-login" (click)="closeMobileMenu()">Sign In</a>
+          <a routerLink="/auth" [queryParams]="{tab: 'signup'}" class="mobile-btn mobile-btn-register" (click)="closeMobileMenu()">Get Started</a>
+        }
+      </div>
     </div>
   </div>
 </nav>

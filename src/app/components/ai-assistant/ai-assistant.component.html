@@ -1,0 +1,168 @@
+<div class="dashboard-container">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content">
+    <div class="ai-assistant-container">
+  <!-- Header Section -->
+  <div class="header-section">
+    <div class="logo-container">
+      <div class="logo">
+        <div class="logo-icon">
+          <div class="house-icon"></div>
+        </div>
+        <div class="logo-text">Edarah</div>
+      </div>
+    </div>
+    
+    <div class="welcome-section">
+      <h1 class="welcome-title">Welcome back, User</h1>
+      <p class="welcome-subtitle">Ask anything about your products, offers, or performance</p>
+    </div>
+  </div>
+
+  <!-- Quick Questions Section -->
+  <div class="quick-questions-section">
+    <div class="quick-questions-grid">
+      <button 
+        *ngFor="let question of quickQuestions" 
+        class="quick-question-btn"
+        (click)="selectQuickQuestion(question)"
+        [disabled]="isAnalyzing">
+        {{ question }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Form Section -->
+  <div class="form-section">
+    <form [formGroup]="questionForm" (ngSubmit)="onSubmit()" class="question-form">
+      <!-- Database Selection -->
+      <div class="form-group">
+        <label for="databaseId" class="form-label">Select Database</label>
+        <select 
+          id="databaseId" 
+          formControlName="databaseId" 
+          class="form-select"
+          (change)="onDatabaseChange($event)"
+          [disabled]="isLoading || isAnalyzing">
+          <option value="">Choose a database...</option>
+          <option *ngFor="let db of databases" [value]="db.id">
+            {{ db.name || db.databaseName }} ({{ (db.type || db.databaseType)?.toUpperCase() }})
+          </option>
+        </select>
+        <div class="error-message" *ngIf="getFieldError('databaseId')">
+          {{ getFieldError('databaseId') }}
+        </div>
+      </div>
+
+      <!-- Question Input -->
+      <div class="question-input-container">
+        <div class="input-wrapper">
+          <input 
+            type="text" 
+            formControlName="question"
+            placeholder="Ask anything"
+            class="question-input"
+            [disabled]="isAnalyzing">
+          <button 
+            type="submit" 
+            class="submit-btn"
+            [disabled]="questionForm.invalid || isAnalyzing">
+            <span *ngIf="!isAnalyzing" class="submit-icon">→</span>
+            <span *ngIf="isAnalyzing" class="loading-spinner"></span>
+          </button>
+        </div>
+        <div class="error-message" *ngIf="getFieldError('question')">
+          {{ getFieldError('question') }}
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Message Display -->
+  <div *ngIf="message" class="message" [ngClass]="'message-' + messageType">
+    {{ message }}
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isAnalyzing" class="loading-section">
+    <div class="loading-content">
+      <div class="loading-spinner-large"></div>
+      <p>Analyzing your data...</p>
+    </div>
+  </div>
+
+  <!-- Results Section -->
+  <div *ngIf="analysisResult && !isAnalyzing" class="results-section">
+    <div class="results-header">
+      <h2>Analysis Results</h2>
+      <div class="confidence-badge">
+        Confidence: {{ analysisResult.data.confidence }}/10
+      </div>
+    </div>
+
+    <!-- Database Info -->
+    <div class="database-info-card">
+      <h3>Database Information</h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="label">Name:</span>
+          <span class="value">{{ analysisResult.data.databaseInfo.name }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Type:</span>
+          <span class="value">{{ analysisResult.data.databaseInfo.type.toUpperCase() }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Summary -->
+    <div class="data-summary-card">
+      <h3>Data Summary</h3>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <span class="label">Total Records:</span>
+          <span class="value">{{ analysisResult.data.dataSummary.totalRecords }}</span>
+        </div>
+        <ng-container *ngFor="let metric of analysisResult.data.dataSummary.keyMetrics | keyvalue">
+          <div class="summary-item">
+            <span class="label">{{ metric.key | titlecase }}:</span>
+            <span class="value">{{ metric.value }}</span>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <!-- Insights -->
+    <div class="insights-card">
+      <h3>Insights</h3>
+      <p class="insights-text">{{ analysisResult.data.insights }}</p>
+    </div>
+
+    <!-- Recommendations -->
+    <div class="recommendations-card">
+      <h3>Recommendations</h3>
+      <ul class="recommendations-list">
+        <li *ngFor="let recommendation of analysisResult.data.recommendations" class="recommendation-item">
+          {{ recommendation }}
+        </li>
+      </ul>
+    </div>
+
+    <!-- SQL Query -->
+    <div class="query-card">
+      <h3>Generated Query</h3>
+      <div class="query-container">
+        <pre class="query-text">{{ analysisResult.data.query }}</pre>
+      </div>
+    </div>
+
+    <!-- Rate Limit Info -->
+    <div class="rate-limit-info">
+      <span>API Calls Remaining: {{ analysisResult.rateLimit.remaining }}</span>
+      <span>Reset Time: {{ formatDate(analysisResult.rateLimit.resetTime) }}</span>
+    </div>
+  </div>
+    </div>
+  </main>
+</div>

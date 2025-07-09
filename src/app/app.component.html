@@ -185,5 +185,7 @@
 <!-- * * * * * * * * * * End of Placeholder  * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
-<app-navigation></app-navigation>
+@if (!isDashboardRoute) {
+  <app-navigation></app-navigation>
+}
 <router-outlet />

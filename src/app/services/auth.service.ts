@@ -51,6 +51,10 @@ export class AuthService {
     return !!this.currentUserValue;
   }
 
+  getCurrentUser(): any | null {
+    return this.currentUserValue;
+  }
+
   getProfile(): Observable<any> {
     return this.http.get(`${this.baseUrl}/me`);
   }

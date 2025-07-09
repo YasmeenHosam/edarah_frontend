@@ -1,0 +1,124 @@
+<div class="products-page">
+  <!-- Products Header -->
+  <div class="products-header">
+    <h1><i class="products-icon">📦</i> Products</h1>
+  </div>
+
+  <!-- Filters Section -->
+  <div class="filters-section">
+    <div class="search-container">
+      <input type="text" 
+             class="search-input" 
+             placeholder="Search..." 
+             [(ngModel)]="searchTerm"
+             (input)="onSearch()">
+      <i class="search-icon">🔍</i>
+    </div>
+
+    <div class="filter-dropdowns">
+      <select class="filter-select" [(ngModel)]="selectedWarningType" (change)="onFilterChange()">
+        <option value="">Warning Type</option>
+        <option value="High">High</option>
+        <option value="Low">Low</option>
+      </select>
+
+      <select class="filter-select" [(ngModel)]="selectedCategory" (change)="onFilterChange()">
+        <option value="">Category</option>
+        <option value="Fruit">Fruit</option>
+        <option value="Electronics">Electronics</option>
+        <option value="Beauty">Beauty</option>
+        <option value="Snacks">Snacks</option>
+        <option value="Household">Household</option>
+      </select>
+    </div>
+
+    <button class="refresh-btn" (click)="refreshData()">
+      Refresh
+    </button>
+  </div>
+
+  <!-- Products Table -->
+  <div class="table-container">
+    <table class="products-table">
+      <thead>
+        <tr>
+          <th (click)="sortBy('name')" class="sortable">
+            Name
+            <span class="sort-indicator" [ngClass]="getSortClass('name')">↕️</span>
+          </th>
+          <th (click)="sortBy('category')" class="sortable">
+            Category
+            <span class="sort-indicator" [ngClass]="getSortClass('category')">↕️</span>
+          </th>
+          <th (click)="sortBy('price')" class="sortable">
+            Price
+            <span class="sort-indicator" [ngClass]="getSortClass('price')">↕️</span>
+          </th>
+          <th (click)="sortBy('sales')" class="sortable">
+            Sales
+            <span class="sort-indicator" [ngClass]="getSortClass('sales')">↕️</span>
+          </th>
+          <th (click)="sortBy('expiryDate')" class="sortable">
+            Expiry date
+            <span class="sort-indicator" [ngClass]="getSortClass('expiryDate')">↕️</span>
+          </th>
+          <th (click)="sortBy('avgProfit')" class="sortable">
+            Avg. profit
+            <span class="sort-indicator" [ngClass]="getSortClass('avgProfit')">↕️</span>
+          </th>
+          <th>Warning</th>
+          <th>Procedure</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of filteredProducts" class="product-row">
+          <td class="product-name">{{ product.name }}</td>
+          <td class="product-category">{{ product.category }}</td>
+          <td class="product-price">{{ product.price }}</td>
+          <td class="product-sales">{{ product.sales }}</td>
+          <td class="product-expiry">{{ product.expiryDate }}</td>
+          <td class="product-profit" [ngClass]="getProfitClass(product.avgProfit)">
+            {{ product.avgProfit }}
+          </td>
+          <td class="product-warning">
+            <span class="warning-badge" [ngClass]="getWarningClass(product.warning)">
+              <i class="warning-icon">⚠️</i>
+              {{ product.warning }}
+            </span>
+          </td>
+          <td class="product-procedure">
+            <button class="analyze-btn" (click)="analyzeProduct(product.id)">
+              Analyze
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="filteredProducts.length === 0" class="empty-state">
+    <div class="empty-icon">📦</div>
+    <h3>No products found</h3>
+    <p>Try adjusting your search or filter criteria</p>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination" *ngIf="filteredProducts.length > 0">
+    <button class="page-btn" 
+            [disabled]="currentPage === 1" 
+            (click)="goToPage(currentPage - 1)">
+      Previous
+    </button>
+    
+    <span class="page-info">
+      Page {{ currentPage }} of {{ totalPages }}
+    </span>
+    
+    <button class="page-btn" 
+            [disabled]="currentPage === totalPages" 
+            (click)="goToPage(currentPage + 1)">
+      Next
+    </button>
+  </div>
+</div>
