@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl } from '@angular/forms';
-import { Router, RouterLink, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.css'
 })
@@ -69,7 +69,8 @@ export class AuthComponent implements OnInit {
       firstName: ['', [Validators.required, Validators.minLength(2)]],
       lastName: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
-      phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]{10,15}$')]],
+      countryCode: ['+20'], // Added country code field
+      phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]{8,15}$')]],
       password: ['', [Validators.required, Validators.minLength(8), this.passwordValidator]],
       confirmPassword: ['', [Validators.required]],
       agreeToTerms: [false, [Validators.requiredTrue]]
@@ -145,6 +146,7 @@ export class AuthComponent implements OnInit {
   get firstName() { return this.signupForm.get('firstName'); }
   get lastName() { return this.signupForm.get('lastName'); }
   get signupEmail() { return this.signupForm.get('email'); }
+  get countryCode() { return this.signupForm.get('countryCode'); }
   get phoneNumber() { return this.signupForm.get('phoneNumber'); }
   get signupPassword() { return this.signupForm.get('password'); }
   get confirmPassword() { return this.signupForm.get('confirmPassword'); }
@@ -242,7 +244,18 @@ export class AuthComponent implements OnInit {
     if (this.signupForm.valid) {
       this.isSignupSubmitting = true;
       this.clearMessages();
-      const { confirmPassword, agreeToTerms, ...userData } = this.signupForm.value;
+      const { confirmPassword, agreeToTerms, countryCode, phoneNumber, firstName, lastName, email, password } = this.signupForm.value;
+
+      // Transform data to match API expectations
+      const userData = {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        password: password,
+        phoneNumber: countryCode + phoneNumber // Combine country code with phone number
+      };
+
+      console.log('Sending registration data:', userData);
 
       this.authService.register(userData).subscribe({
         next: (response) => {
@@ -257,8 +270,18 @@ export class AuthComponent implements OnInit {
         },
         error: (err) => {
           console.error('Registration failed', err);
+          console.error('Error details:', err.error);
+          if (err.error?.details) {
+            console.error('Validation details:', err.error.details);
+          }
           this.isSignupSubmitting = false;
-          this.errorMessage = err.error?.message || 'Registration failed. Please try again.';
+
+          // Show detailed error message if available
+          if (err.error?.details && Array.isArray(err.error.details)) {
+            this.errorMessage = err.error.details.map((detail: any) => detail.message || detail).join(', ');
+          } else {
+            this.errorMessage = err.error?.message || 'Registration failed. Please try again.';
+          }
         }
       });
     } else {

@@ -146,21 +146,39 @@
         </div>
 
         <form [formGroup]="signupForm" (ngSubmit)="onSignupSubmit()" class="auth-form">
-          <!-- User Name Field -->
-          <div class="form-group">
-            <label for="userName">User Name</label>
-            <input
-              type="text"
-              id="userName"
-              formControlName="firstName"
-              placeholder="Enter your full name"
-              [class.error]="firstName?.invalid && firstName?.touched"
-            >
-            @if (firstName?.invalid && firstName?.touched) {
-              <div class="error-message">
-                {{ getFieldError('firstName') }}
-              </div>
-            }
+          <!-- Name Fields Row -->
+          <div class="name-row">
+            <div class="form-group">
+              <label for="firstName">First Name</label>
+              <input
+                type="text"
+                id="firstName"
+                formControlName="firstName"
+                placeholder="Enter your first name"
+                [class.error]="firstName?.invalid && firstName?.touched"
+              >
+              @if (firstName?.invalid && firstName?.touched) {
+                <div class="error-message">
+                  {{ getFieldError('firstName') }}
+                </div>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="lastName">Last Name</label>
+              <input
+                type="text"
+                id="lastName"
+                formControlName="lastName"
+                placeholder="Enter your last name"
+                [class.error]="lastName?.invalid && lastName?.touched"
+              >
+              @if (lastName?.invalid && lastName?.touched) {
+                <div class="error-message">
+                  {{ getFieldError('lastName') }}
+                </div>
+              }
+            </div>
           </div>
 
           <!-- Phone and Email Row -->
@@ -168,7 +186,7 @@
             <div class="form-group">
               <label for="phoneNumber">Phone Number</label>
               <div class="phone-input-container">
-                <select class="country-code">
+                <select class="country-code" formControlName="countryCode">
                   <option value="+20">🇪🇬 +20</option>
                   <option value="+1">🇺🇸 +1</option>
                   <option value="+44">🇬🇧 +44</option>
@@ -242,14 +260,14 @@
               }
 
               <!-- Password Strength Indicator -->
-              @if (signupPassword?.value && passwordStrength < 4) {
-                <div class="password-strength">
-                  <div class="strength-bars">
-                    <div class="strength-bar" [class.active]="passwordStrength >= 1" [class.weak]="passwordStrength === 1"></div>
-                    <div class="strength-bar" [class.active]="passwordStrength >= 2" [class.medium]="passwordStrength === 2"></div>
-                    <div class="strength-bar" [class.active]="passwordStrength >= 3" [class.strong]="passwordStrength === 3"></div>
-                    <div class="strength-bar" [class.active]="passwordStrength >= 4" [class.strong]="passwordStrength === 4"></div>
-                  </div>
+              <div class="password-strength">
+                <div class="strength-bars">
+                  <div class="strength-bar" [class.active]="passwordStrength >= 1" [class.weak]="passwordStrength === 1"></div>
+                  <div class="strength-bar" [class.active]="passwordStrength >= 2" [class.medium]="passwordStrength === 2"></div>
+                  <div class="strength-bar" [class.active]="passwordStrength >= 3" [class.strong]="passwordStrength === 3"></div>
+                  <div class="strength-bar" [class.active]="passwordStrength >= 4" [class.strong]="passwordStrength === 4"></div>
+                </div>
+                @if (signupPassword?.value && passwordStrength < 4) {
                   <div class="strength-requirements">
                     @if (!hasLowercase) {
                       <div class="requirement">
@@ -272,13 +290,13 @@
                       </div>
                     }
                   </div>
-                </div>
-              }
-              @if (signupPassword?.value && passwordStrength === 4) {
-                <div class="password-success">
-                  <span class="success-icon">✓</span> Password meets all requirements
-                </div>
-              }
+                }
+                @if (signupPassword?.value && passwordStrength === 4) {
+                  <div class="password-success">
+                    <span class="success-icon">✓</span> Password meets all requirements
+                  </div>
+                }
+              </div>
             </div>
 
           </div>
@@ -366,7 +384,6 @@
         <div class="logo-icon">
           <img src="/assets/images/logo.png" alt="Edarah Logo" class="logo-image">
         </div>
-        <h1 class="brand-name">Edarah</h1>
       </div>
 
       <div class="brand-message">
@@ -375,7 +392,6 @@
           <p>Sign in to continue your journey</p>
         } @else {
           <h2>Let's make money</h2>
-          <p>Join us and start your journey</p>
         }
       </div>
 
@@ -384,7 +400,7 @@
           <p class="toggle-text">Don't have an account?</p>
           <button class="toggle-btn" (click)="switchTab('signup')">Sign Up</button>
         } @else {
-          <p class="toggle-text">Already have an account?</p>
+          <p class="toggle-text">Login to get started</p>
           <button class="toggle-btn" (click)="switchTab('signin')">Sign In</button>
         }
       </div>

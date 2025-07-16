@@ -1,16 +1,28 @@
+/* Dashboard Container */
 .dashboard-container {
   display: flex;
   min-height: 100vh;
-  background-color: #f8fafc;
+  width: 100vw;
+  position: relative;
+}
+
+/* Sidebar Styles */
+app-sidebar {
+  flex: 0 0 280px;
+  width: 280px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 /* Main Content Styles */
 .main-content {
   flex: 1;
-  margin-left: 280px;
   padding: 2rem;
-  background-color: #f8fafc;
+  background: #f8fafc;
   min-height: 100vh;
+  overflow-x: auto;
   transition: margin-left 0.3s ease;
 }
 
@@ -559,6 +571,19 @@
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  transform: translateY(30px);
+  opacity: 0;
+}
+
+.warnings-card.animated {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.warnings-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
 .warnings-card h3 {
@@ -635,6 +660,19 @@
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  transform: translateY(30px);
+  opacity: 0;
+}
+
+.profit-panel.animated {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.profit-panel:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
 .profit-tabs {
@@ -901,7 +939,7 @@
     font-size: 1.5rem;
   }
 }
-}
+
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -932,7 +970,7 @@
   .dashboard-cards {
     grid-template-columns: 1fr;
   }
-}
+
 
 /* Scrollbar Styling */
 .sidebar-nav::-webkit-scrollbar {

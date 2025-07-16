@@ -1,0 +1,68 @@
+<!-- Pricing Section -->
+<section id="pricing" class="pricing">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Pricing</h2>
+    </div>
+
+    <div class="pricing-grid">
+      @for (plan of pricingPlans; track plan.name) {
+        <div class="pricing-card" [class.popular]="plan.isPopular">
+          @if (plan.isPopular) {
+            <div class="popular-badge">
+              <svg class="crown-icon" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M5 16L3 6l5.5 4L12 4l3.5 6L21 6l-2 10H5z"/>
+              </svg>
+              Most Popular
+            </div>
+          }
+
+          <div class="plan-header">
+            <h3 class="plan-name">{{ plan.name }}</h3>
+            <div class="plan-price">
+              <span class="price-label">Price: </span>
+              <span class="price">{{ plan.price }}</span>
+              @if (plan.period) {
+                <span class="period">{{ plan.period }}</span>
+              }
+            </div>
+            <p class="plan-description">{{ plan.description }}</p>
+          </div>
+
+          <div class="plan-features">
+            @for (feature of plan.features; track feature) {
+              <div class="feature-item positive">
+                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="9,12 12,15 16,10"/>
+                </svg>
+                <span>{{ feature }}</span>
+              </div>
+            }
+
+            @if (plan.negativeFeatures && plan.negativeFeatures.length > 0) {
+              @for (negativeFeature of plan.negativeFeatures; track negativeFeature) {
+                <div class="feature-item negative">
+                  <svg class="cross-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="15" y1="9" x2="9" y2="15"/>
+                    <line x1="9" y1="9" x2="15" y2="15"/>
+                  </svg>
+                  <span>{{ negativeFeature }}</span>
+                </div>
+              }
+            }
+          </div>
+
+          <button
+            class="plan-button"
+            [class]="plan.buttonClass"
+            (click)="onSelectPlan(plan)"
+          >
+            {{ plan.buttonText }}
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+</section>

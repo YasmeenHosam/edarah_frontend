@@ -23,7 +23,14 @@ export class AuthService {
   }
 
   register(user: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/register`, user);
+    console.log('AuthService: Sending registration request to:', `${this.baseUrl}/register`);
+    console.log('AuthService: Registration data:', user);
+
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+
+    return this.http.post(`${this.baseUrl}/register`, user, { headers });
   }
 
   login(credentials: any): Observable<any> {

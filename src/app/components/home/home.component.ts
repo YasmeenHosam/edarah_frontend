@@ -1,147 +1,42 @@
-import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnDestroy, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
-interface PricingPlan {
-  name: string;
-  price: string;
-  period: string;
-  description: string;
-  features: string[];
-  negativeFeatures?: string[];
-  isPopular?: boolean;
-  buttonText: string;
-  buttonClass: string;
-}
+// Import section components
+import { HeroSectionComponent } from './sections/hero-section.component';
+import { WhyUsSectionComponent } from './sections/why-us-section.component';
+import { FeaturesSectionComponent } from './sections/features-section.component';
+import { PreviewSectionComponent } from './sections/preview-section.component';
+import { MadeForSectionComponent } from './sections/made-for-section.component';
+import { AboutUsSectionComponent } from './sections/about-us-section.component';
+import { PricingSectionComponent } from './sections/pricing-section.component';
+import { ContactSectionComponent } from './sections/contact-section.component';
 
-interface Feature {
-  icon: string;
-  title: string;
-  description: string;
-}
 
-interface ContactData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  subject: string;
-  message: string;
-}
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    HeroSectionComponent,
+    WhyUsSectionComponent,
+    FeaturesSectionComponent,
+    PreviewSectionComponent,
+    MadeForSectionComponent,
+    AboutUsSectionComponent,
+    PricingSectionComponent,
+    ContactSectionComponent
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements AfterViewInit, OnDestroy {
   private observer!: IntersectionObserver;
-  showMore = false;
-
-  contactData: ContactData = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    subject: '',
-    message: ''
-  };
 
   constructor(private router: Router) {}
-  
-  features: Feature[] = [
-    {
-      icon: 'brain',
-      title: 'Advanced AI Models',
-      description: 'Access cutting-edge AI models for various tasks including text generation, image processing, and data analysis.'
-    },
-    {
-      icon: 'zap',
-      title: 'Lightning Fast',
-      description: 'Get results in seconds with our optimized infrastructure and high-performance computing resources.'
-    },
-    {
-      icon: 'shield',
-      title: 'Secure & Private',
-      description: 'Your data is protected with enterprise-grade security and privacy measures. We never store your sensitive information.'
-    },
-    {
-      icon: 'code',
-      title: 'Easy Integration',
-      description: 'Simple APIs and SDKs make it easy to integrate our AI services into your existing applications and workflows.'
-    },
-    {
-      icon: 'users',
-      title: 'Team Collaboration',
-      description: 'Work together with your team members, share projects, and manage access controls efficiently.'
-    },
-    {
-      icon: 'chart',
-      title: 'Analytics & Insights',
-      description: 'Track usage, monitor performance, and gain insights into your AI-powered applications with detailed analytics.'
-    }
-  ];
-
-  pricingPlans: PricingPlan[] = [
-    {
-      name: 'Free Plan',
-      price: 'Free',
-      period: '',
-      description: 'Perfect for small stores testing smart recommendations',
-      features: [
-        'Basic product recommendations',
-        'Limited AI insights',
-        'Alerts for risky products (basic)',
-        'Access to dashboard'
-      ],
-      negativeFeatures: [
-        'No AI assistant',
-        'No advanced price suggestions',
-        'No integrations'
-      ],
-      buttonText: 'Start Free Plan',
-      buttonClass: 'btn-outline'
-    },
-    {
-      name: 'Pro Plan',
-      price: '$29',
-      period: '/month',
-      description: 'Advanced insights to grow your sales and profits',
-      features: [
-        'Detailed pricing suggestions',
-        'AI assistant to guide your decisions',
-        'Risk alerts for products losing money',
-        'Smart promotional recommendations',
-        'Access to dashboard & insights'
-      ],
-      negativeFeatures: [
-        'No API access',
-        'No store platform integrations'
-      ],
-      isPopular: true,
-      buttonText: 'Get Pro Plan',
-      buttonClass: 'btn-primary'
-    },
-    {
-      name: 'Business Plan',
-      price: '$70',
-      period: '/month',
-      description: 'Full control, automation, and advanced data tools',
-      features: [
-        'All Pro features',
-        'API access for automation',
-        'Automatic integration to store',
-        'Advanced reporting & CSV export',
-        'Priority support'
-      ],
-      negativeFeatures: [],
-      buttonText: 'Get Pro Plan',
-      buttonClass: 'btn-outline'
-    }
-  ];
 
   scrollToSection(sectionId: string) {
     const element = document.getElementById(sectionId);
@@ -233,30 +128,16 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     aboutUsItems.forEach(item => aboutUsObserver.observe(item));
   }
 
-  toggleReadMore() {
-    this.showMore = !this.showMore;
-  }
-
-  onSelectPlan(plan: PricingPlan) {
+  onSelectPlan(plan: any) {
     console.log('Selected plan:', plan.name);
     // Navigate to auth page or handle plan selection
     this.router.navigate(['/auth']);
   }
 
-  onSubmitContact() {
-    console.log('Contact form submitted:', this.contactData);
+  onSubmitContact(contactData: any) {
+    console.log('Contact form submitted:', contactData);
     // Here you would typically send the data to your backend
-    // For now, we'll just show a success message and reset the form
+    // For now, we'll just show a success message
     alert('Thank you for your message! We\'ll get back to you soon.');
-
-    // Reset form
-    this.contactData = {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-      subject: '',
-      message: ''
-    };
   }
 }

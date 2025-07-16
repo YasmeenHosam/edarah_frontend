@@ -154,6 +154,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
     this.initializeCharts();
+    this.initializeAnimations();
   }
 
   setActiveMenuItem(itemId: string) {
@@ -211,6 +212,82 @@ export class DashboardComponent implements OnInit {
       this.createDonutChart();
       this.setupTabHandlers();
     }, 100);
+  }
+
+  private initializeAnimations() {
+    // Initialize animations with intersection observer
+    setTimeout(() => {
+      this.setupIntersectionObserver();
+      this.animateElementsOnLoad();
+    }, 200);
+  }
+
+  private setupIntersectionObserver() {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const element = entry.target as HTMLElement;
+          element.classList.add('animated');
+          observer.unobserve(element);
+        }
+      });
+    }, observerOptions);
+
+    // Observe all animatable elements
+    const animatableElements = document.querySelectorAll(
+      '.product-card, .insight-card, .warnings-card, .profit-panel, .performance-section, .analytics-section'
+    );
+
+    animatableElements.forEach(element => {
+      observer.observe(element);
+    });
+  }
+
+  private animateElementsOnLoad() {
+    // Animate header immediately
+    const header = document.querySelector('.dashboard-header');
+    if (header) {
+      setTimeout(() => {
+        header.classList.add('animated');
+      }, 100);
+    }
+
+    // Animate sections with staggered delays
+    const sections = [
+      '.products-section',
+      '.insights-section',
+      '.performance-section',
+      '.analytics-section'
+    ];
+
+    sections.forEach((selector, index) => {
+      const section = document.querySelector(selector);
+      if (section) {
+        setTimeout(() => {
+          section.classList.add('animated');
+        }, 200 + (index * 150));
+      }
+    });
+
+    // Animate cards with staggered delays
+    const productCards = document.querySelectorAll('.product-card');
+    productCards.forEach((card, index) => {
+      setTimeout(() => {
+        card.classList.add('animated');
+      }, 400 + (index * 100));
+    });
+
+    const insightCards = document.querySelectorAll('.insight-card');
+    insightCards.forEach((card, index) => {
+      setTimeout(() => {
+        card.classList.add('animated');
+      }, 600 + (index * 80));
+    });
   }
 
   private createMiniCharts() {

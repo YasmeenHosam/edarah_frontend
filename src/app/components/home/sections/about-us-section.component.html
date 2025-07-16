@@ -1,0 +1,60 @@
+<!-- About Us Section -->
+<section class="about-us">
+  <div class="container">
+    <div class="about-us-content">
+      <!-- Centered Section Header -->
+      <div class="section-header">
+        <h2 class="section-title">About <span class="title-highlight">Us</span></h2>
+      </div>
+
+      <!-- Main Content Grid -->
+      <div class="about-us-main-content">
+        <div class="about-us-text fade-in-left">
+          <div class="about-us-main">
+          <h3 class="about-question">Who are we?</h3>
+
+          <div class="about-description">
+            <p class="description-paragraph">
+              We're a team of local entrepreneurs and tech enthusiasts who understand the daily struggles of small businesses.
+            </p>
+
+            <p class="description-paragraph">
+              We know pricing can be stressful, sales can drop unexpectedly, and managing your store feels overwhelming. That's why we built this platform — to give you simple, smart tools that make pricing, promotions, and product management easy.
+            </p>
+
+            <p class="description-paragraph">
+              No complicated software. No guesswork. Just clear, AI-powered insights to help your store grow.
+            </p>
+          </div>
+
+          <div class="read-more-section">
+            <button class="read-more-btn" (click)="toggleReadMore()">
+              <span>{{ showMore ? 'Read Less' : 'Read More' }}</span>
+              <svg class="read-more-icon" [class.rotated]="showMore" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <polyline points="6,9 12,15 18,9"/>
+              </svg>
+            </button>
+
+            <div class="additional-content" [class.expanded]="showMore">
+              <p class="description-paragraph">
+                Our mission is to empower small business owners with the tools they need to compete in today's market. We believe that every business, regardless of size, deserves access to powerful analytics and AI-driven insights.
+              </p>
+
+              <p class="description-paragraph">
+                Founded by entrepreneurs who have walked in your shoes, we understand the challenges of running a small business. That's why we've created a platform that's not just powerful, but also simple and affordable.
+              </p>
+            </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-us-visual fade-in-right">
+          <div class="about-image-container">
+            <img src="/assets/images/about us/about_us.png" alt="About Us - Our Team" class="about-us-image">
+            <div class="image-overlay"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

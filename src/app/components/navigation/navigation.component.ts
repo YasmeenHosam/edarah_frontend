@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -14,9 +15,11 @@ import { AuthService } from '../../services/auth.service';
 export class NavigationComponent implements OnInit, OnDestroy {
   currentUser: any | null = null;
   private userSubscription!: Subscription;
+  private routerSubscription!: Subscription;
   isScrolled = false;
   isMobileMenuOpen = false;
   isUserMenuOpen = false;
+  isAuthPage = false;
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -24,11 +27,28 @@ export class NavigationComponent implements OnInit, OnDestroy {
     this.userSubscription = this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
     });
+
+    // Check if current route is auth page
+    this.checkAuthPage();
+
+    // Listen to route changes
+    this.routerSubscription = this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.checkAuthPage();
+      });
+  }
+
+  private checkAuthPage() {
+    this.isAuthPage = this.router.url.includes('/auth');
   }
 
   ngOnDestroy() {
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();
+    }
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
     }
   }
 
