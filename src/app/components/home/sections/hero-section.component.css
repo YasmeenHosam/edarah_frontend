@@ -26,22 +26,22 @@
 }
 
 .hero-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(3rem, 8vw, 5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
   width: 100%;
   max-width: 100%;
   overflow: hidden;
   height: 100%;
   max-height: calc(100vh - 10rem);
+  text-align: center;
 }
 
 .hero-text {
-  text-align: left;
-  padding-left: clamp(1rem, 4vw, 3.75rem);
-  padding-right: clamp(1rem, 3vw, 2.5rem);
-  max-width: 100%;
+  text-align: center;
+  padding: 0 clamp(1rem, 4vw, 2rem);
+  max-width: 800px;
   word-wrap: break-word;
 }
 
@@ -89,11 +89,163 @@
   justify-content: center;
 }
 
-/* Hero Visual - Empty placeholder */
+/* Hero Visual - Zigzag Animation */
 .hero-visual {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  height: 100%;
+  min-height: 600px;
+  overflow: visible;
+  padding: 50px 20px;
+  box-sizing: border-box;
+}
+
+.zigzag-animation {
+  width: 100%;
+  height: 100%;
+  max-width: 1600px;
+  max-height: 900px;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.zigzag-svg {
+  width: 100%;
+  height: 100%;
+  min-height: 500px;
+  display: block;
+  overflow: visible;
+}
+
+/* Ensure foreignObject content is fully visible */
+.zigzag-svg foreignObject {
+  overflow: visible;
+}
+
+.zigzag-svg foreignObject > div {
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Zigzag line animation */
+.zigzag-line {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawLine 3s ease-in-out forwards;
+}
+
+@keyframes drawLine {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Dots animation */
+.dot {
+  opacity: 0;
+  transform: scale(0);
+  animation: showDot 0.5s ease-out forwards;
+}
+
+.dot:nth-child(3) { animation-delay: 0.5s; }
+.dot:nth-child(4) { animation-delay: 1s; }
+.dot:nth-child(5) { animation-delay: 1.5s; }
+.dot:nth-child(6) { animation-delay: 2s; }
+
+@keyframes showDot {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Icons animation */
+.pulse-icon {
+  width: 160px;
+  height: 160px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0) rotate(180deg);
+  animation: showIcon 0.8s ease-out forwards, pulse 2s infinite;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.pulse-icon img {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+}
+
+/* Icon delays */
+.icon-1 { animation-delay: 1s, 3s; }
+.icon-2 { animation-delay: 1.5s, 3.5s; }
+.icon-3 { animation-delay: 2s, 4s; }
+.icon-4 { animation-delay: 2.5s, 4.5s; }
+
+@keyframes showIcon {
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255,255,255,0.7), 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+  70% {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 20px rgba(255,255,255,0), 0 12px 40px rgba(0, 0, 0, 0.2);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255,255,255,0), 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.label {
+  color: #ffffff;
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 12px;
+  margin-top: 0;
+  opacity: 0;
+  animation: fadeInLabel 0.5s ease-out forwards;
+  font-weight: 700;
+  white-space: nowrap;
+  text-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.8),
+    0 4px 8px rgba(0, 0, 0, 0.6),
+    0 0 0 2px rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.3);
+  padding: 8px 16px;
+  border-radius: 25px;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.8);
+}
+
+.label-1 { animation-delay: 1.3s; }
+.label-2 { animation-delay: 1.8s; }
+.label-3 { animation-delay: 2.3s; }
+.label-4 { animation-delay: 2.8s; }
+
+@keyframes fadeInLabel {
+  to {
+    opacity: 1;
+  }
 }
 
 /* Button Styles */
@@ -212,6 +364,33 @@
     justify-content: center;
     width: 100%;
   }
+
+  /* Zigzag animation responsive adjustments */
+  .zigzag-animation {
+    max-width: 1400px;
+    max-height: 700px;
+    padding: 40px 15px;
+  }
+
+  .hero-visual {
+    min-height: 550px;
+    padding: 40px 15px;
+  }
+
+  .pulse-icon {
+    width: 140px;
+    height: 140px;
+  }
+
+  .pulse-icon img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .label {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -240,6 +419,33 @@
 
   .title-highlight {
     margin-right: 0.5rem;
+  }
+
+  /* Zigzag animation for tablets */
+  .zigzag-animation {
+    max-width: 1200px;
+    max-height: 600px;
+    padding: 30px 10px;
+  }
+
+  .hero-visual {
+    min-height: 500px;
+    padding: 30px 10px;
+  }
+
+  .pulse-icon {
+    width: 120px;
+    height: 120px;
+  }
+
+  .pulse-icon img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .label {
+    font-size: 22px;
+    margin-bottom: 8px;
   }
 }
 
@@ -271,6 +477,49 @@
 
   .btn-large {
     padding: clamp(0.875rem, 3vw, 1rem) clamp(1.5rem, 5vw, 2rem);
+  }
+
+  /* Zigzag animation for mobile */
+  .zigzag-animation {
+    max-width: 1000px;
+    max-height: 500px;
+    padding: 25px 8px;
+  }
+
+  .hero-visual {
+    min-height: 450px;
+    padding: 25px 8px;
+  }
+
+  .pulse-icon {
+    width: 100px;
+    height: 100px;
+  }
+
+  .pulse-icon img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .label {
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
+
+  /* Reduce animation intensity on mobile */
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(255,255,255,0.3);
+    }
+    70% {
+      transform: scale(1.05);
+      box-shadow: 0 0 0 8px rgba(255,255,255,0);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(255,255,255,0);
+    }
   }
 }
 
@@ -321,5 +570,50 @@
   .hero-description {
     font-size: clamp(0.9rem, 3vw, 1.1rem);
     margin-bottom: clamp(0.75rem, 2vw, 1rem);
+  }
+
+  /* Zigzag animation for very small screens */
+  .zigzag-animation {
+    max-width: 800px;
+    max-height: 450px;
+    padding: 20px 5px;
+  }
+
+  .hero-visual {
+    min-height: 400px;
+    padding: 20px 5px;
+  }
+
+  .pulse-icon {
+    width: 90px;
+    height: 90px;
+  }
+
+  .pulse-icon img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .label {
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+
+  /* Simplify animations for very small screens */
+  .zigzag-line {
+    animation-duration: 2s;
+  }
+
+  .pulse-icon {
+    animation: showIcon 0.6s ease-out forwards, simplePulse 3s infinite;
+  }
+
+  @keyframes simplePulse {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.02);
+    }
   }
 }

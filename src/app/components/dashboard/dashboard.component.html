@@ -5,282 +5,354 @@
   <main class="main-content">
     <!-- Header -->
     <div class="dashboard-header">
-      <h1>Welcome back, User!</h1>
-      <div class="user-avatar">
-        <img src="/assets/images/white_logo.png" alt="User Avatar" class="avatar-img">
+      <div class="header-content">
+        <h1>Welcome back, {{ currentUser?.name || 'User' }}!</h1>
+        <p class="header-subtitle">Here's what's happening with your business today</p>
+      </div>
+      <div class="header-actions">
+        <p-button 
+          icon="pi pi-refresh" 
+          label="Refresh" 
+          styleClass="p-button-outlined"
+          (onClick)="refreshData()">
+        </p-button>
+        <p-avatar 
+          image="/assets/images/white_logo.png" 
+          size="large" 
+          shape="circle">
+        </p-avatar>
       </div>
     </div>
 
-    <!-- Products At Risk Section -->
-    <div class="products-at-risk-section">
-      <div class="section-header">
-        <h2><i class="info-icon">ℹ</i> Products At Risk</h2>
+    <!-- Stats Cards Row -->
+    <section class="dashboard-section">
+      <div class="stats-row">
+        <p-card styleClass="stats-card revenue-card">
+          <div class="stat-content">
+            <div class="stat-icon">
+              <i class="pi pi-dollar" style="font-size: 2rem; color: #10b981;"></i>
+            </div>
+            <div class="stat-details">
+              <h3>$24,500</h3>
+              <p>Total Revenue</p>
+              <p-tag severity="success" value="+12.5%" icon="pi pi-arrow-up"></p-tag>
+            </div>
+          </div>
+        </p-card>
+
+      <p-card styleClass="stats-card orders-card">
+        <div class="stat-content">
+          <div class="stat-icon">
+            <i class="pi pi-shopping-cart" style="font-size: 2rem; color: #3b82f6;"></i>
+          </div>
+          <div class="stat-details">
+            <h3>1,247</h3>
+            <p>Total Orders</p>
+            <p-tag severity="info" value="+8.2%" icon="pi pi-arrow-up"></p-tag>
+          </div>
+        </div>
+      </p-card>
+
+      <p-card styleClass="stats-card products-card">
+        <div class="stat-content">
+          <div class="stat-icon">
+            <i class="pi pi-box" style="font-size: 2rem; color: #f59e0b;"></i>
+          </div>
+          <div class="stat-details">
+            <h3>342</h3>
+            <p>Products</p>
+            <p-tag severity="warning" value="24 at risk" icon="pi pi-exclamation-triangle"></p-tag>
+          </div>
+        </div>
+      </p-card>
+
+      <p-card styleClass="stats-card profit-card">
+        <div class="stat-content">
+          <div class="stat-icon">
+            <i class="pi pi-chart-line" style="font-size: 2rem; color: #8b5cf6;"></i>
+          </div>
+          <div class="stat-details">
+            <h3>12.5%</h3>
+            <p>Profit Margin</p>
+            <p-tag severity="success" value="+3.2%" icon="pi pi-arrow-up"></p-tag>
+          </div>
+        </div>
+      </p-card>
       </div>
+    </section>
+
+    <!-- Charts Section -->
+    <section class="dashboard-section">
+      <div class="charts-section">
+      <div class="charts-row">
+        <!-- Performance Chart -->
+        <p-card header="Performance Overview" styleClass="chart-card performance-chart">
+          <div class="chart-container">
+            <p-chart 
+              type="line" 
+              [data]="lineData" 
+              [options]="lineOptions"
+              height="300px">
+            </p-chart>
+          </div>
+        </p-card>
+
+        <!-- Warnings Distribution -->
+        <p-card header="Risk Distribution" styleClass="chart-card warnings-chart">
+          <div class="chart-container">
+            <p-chart 
+              type="doughnut" 
+              [data]="donutData" 
+              [options]="donutOptions"
+              height="300px">
+            </p-chart>
+          </div>
+        </p-card>
+      </div>
+
+      <!-- Category Performance -->
+      <p-card header="Category Performance" styleClass="chart-card category-chart">
+        <div class="chart-container">
+          <p-chart 
+            type="bar" 
+            [data]="barData" 
+            [options]="barOptions"
+            height="350px">
+          </p-chart>
+        </div>
+      </p-card>
+      </div>
+    </section>
+
+    <!-- Products At Risk Section -->
+    <section class="dashboard-section">
+      <p-card header="Products At Risk" styleClass="risk-section-card">
+      <div class="risk-cards">
+        <div class="risk-card loss">
+          <div class="risk-icon">
+            <i class="pi pi-exclamation-triangle" style="color: #ef4444;"></i>
+          </div>
+          <div class="risk-content">
+            <h3>Loss</h3>
+            <p class="risk-count">24 products</p>
+            <p class="risk-description">Products causing financial loss</p>
+            <p-progressBar [value]="35" styleClass="risk-progress"></p-progressBar>
+          </div>
+        </div>
+
+        <div class="risk-card expiry">
+          <div class="risk-icon">
+            <i class="pi pi-clock" style="color: #f59e0b;"></i>
+          </div>
+          <div class="risk-content">
+            <h3>Almost Expired</h3>
+            <p class="risk-count">12 products</p>
+            <p class="risk-description">Products nearing expiration</p>
+            <p-progressBar [value]="25" styleClass="risk-progress warning"></p-progressBar>
+          </div>
+        </div>
+
+        <div class="risk-card sales">
+          <div class="risk-icon">
+            <i class="pi pi-chart-line" style="color: #3b82f6;"></i>
+          </div>
+          <div class="risk-content">
+            <h3>Low Sales</h3>
+            <p class="risk-count">18 products</p>
+            <p class="risk-description">Products with declining sales</p>
+            <p-progressBar [value]="20" styleClass="risk-progress info"></p-progressBar>
+          </div>
+        </div>
+
+        <div class="risk-card stock">
+          <div class="risk-icon">
+            <i class="pi pi-box" style="color: #6b7280;"></i>
+          </div>
+          <div class="risk-content">
+            <h3>Dead Stock</h3>
+            <p class="risk-count">8 products</p>
+            <p class="risk-description">Products not moving</p>
+            <p-progressBar [value]="15" styleClass="risk-progress secondary"></p-progressBar>
+          </div>
+        </div>
+
+        <div class="risk-card price">
+          <div class="risk-icon">
+            <i class="pi pi-dollar" style="color: #8b5cf6;"></i>
+          </div>
+          <div class="risk-content">
+            <h3>Low Prices</h3>
+            <p class="risk-count">6 products</p>
+            <p class="risk-description">Products with pricing issues</p>
+            <p-progressBar [value]="5" styleClass="risk-progress purple"></p-progressBar>
+          </div>
+        </div>
+      </div>
+
+      <p-divider></p-divider>
 
       <div class="filters-row">
         <div class="search-box">
-          <input type="text" placeholder="Search..." class="search-input">
-          <i class="search-icon">🔍</i>
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input 
+              type="text" 
+              pInputText 
+              placeholder="Search products..." 
+              class="search-input">
+          </span>
         </div>
-        <select class="filter-select">
-          <option>Warning Type</option>
-          <option>Low Stock</option>
-          <option>Expiry Risk</option>
-          <option>Loss Risk</option>
-        </select>
-        <select class="filter-select">
-          <option>Category</option>
-          <option>Electronics</option>
-          <option>Health</option>
-          <option>Home</option>
-        </select>
-        <button class="refresh-btn">Refresh</button>
+        
+        <p-dropdown 
+          [options]="warningTypes" 
+          placeholder="Warning Type"
+          optionLabel="label"
+          optionValue="value"
+          styleClass="filter-dropdown">
+        </p-dropdown>
+        
+        <p-dropdown 
+          [options]="categories" 
+          placeholder="Category"
+          optionLabel="label"
+          optionValue="value"
+          styleClass="filter-dropdown">
+        </p-dropdown>
+        
+        <p-button 
+          icon="pi pi-refresh" 
+          label="Refresh" 
+          styleClass="p-button-outlined"
+          (onClick)="refreshData()">
+        </p-button>
       </div>
 
+      <!-- Products Grid with PrimeNG Cards -->
       <div class="products-grid">
-        <div *ngFor="let product of productsAtRisk"
-             class="product-card"
-             [ngClass]="product.warningLevel + '-card'">
-          <div class="product-info">
-            <h4>{{ product.name }}</h4>
-            <p class="product-id">ID: <span>{{ product.id }}</span></p>
-            <div class="product-image">
-              <img [src]="product.image"
-                   [alt]="product.name"
-                   class="product-img"
-                   [attr.data-fallback]="product.fallbackImage"
-                   (error)="onImageError($event)">
-            </div>
-          </div>
-          <div class="warning-section">
-            <div class="warning-badge" [ngClass]="product.warningLevel">
-              ⚠️ Warning: {{ product.warningType }}
-            </div>
-            <div class="notice">📋 Short Notice: {{ product.notice }}</div>
-            <div class="suggestion">💡 Quick Suggestion: {{ product.suggestion }}</div>
-          </div>
-          <div class="card-actions">
-            <button class="btn-confirm" (click)="confirmProduct(product.id)">Confirm</button>
-            <button class="btn-edit" (click)="editProduct(product.id)">Edit Product</button>
-          </div>
-        </div>
+        <div
+          *ngFor="let product of productsAtRisk"
+          class="product-card-new"
+          [ngClass]="'card-' + product.warningLevel">
 
-        <div class="suggestions-panel">
-          <h3>Reason Behind Suggestions</h3>
-          <p>This product has been in stock for 17 days without sales compared to leading items, it's performing below average</p>
-
-          <div class="mini-stats">
-            <h4>Mini State Snapshot</h4>
-            <p>This product has been in stock for 17 days without sales</p>
-            <div class="stats-grid">
-              <div class="stat-item">
-                <span class="label">Last sale:</span>
-                <span class="value">17 days ago</span>
-              </div>
-              <div class="stat-item">
-                <span class="label">Remaining in stock:</span>
-                <span class="value">24 units</span>
-              </div>
-              <div class="stat-item">
-                <span class="label">Urgency level:</span>
-                <span class="value high">High</span>
-              </div>
-              <div class="stat-item">
-                <span class="label">Suggested Action Time:</span>
-                <span class="value">Within 3 days</span>
-              </div>
+          <!-- Card Header -->
+          <div class="card-header-new">
+            <div class="product-info-header">
+              <h3 class="product-name">Name: <span>{{ product.name }}</span></h3>
+              <p class="product-id-header">ID: <span>{{ product.id }}</span></p>
             </div>
           </div>
 
-          <button class="btn-ai-help">
-            <span>Need Any Help?</span>
-            <div class="ai-icon">🤖</div>
-          </button>
+          <!-- Product Image -->
+          <div class="product-image-container">
+            <img [src]="product.image"
+                 [alt]="product.name"
+                 class="product-image-new"
+                 [attr.data-fallback]="product.fallbackImage"
+                 (error)="onImageError($event)">
+          </div>
 
-          <button class="btn-ask-bot">Ask Our Bot</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Insight Panel Section -->
-    <div class="insight-panel-section">
-      <div class="section-header">
-        <h2><i class="chart-icon">📊</i> Insight Panel</h2>
-      </div>
-
-      <div class="insights-grid">
-        <div class="insight-card loss-card">
-          <div class="insight-header">
-            <span class="indicator loss"></span>
-            <span class="title">Loss</span>
-            <span class="period">Weekly ▼</span>
-          </div>
-          <div class="chart-container">
-            <canvas class="mini-chart" data-chart="loss"></canvas>
-          </div>
-        </div>
-
-        <div class="insight-card expired-card">
-          <div class="insight-header">
-            <span class="indicator expired"></span>
-            <span class="title">Expired</span>
-            <span class="period">Weekly ▼</span>
-          </div>
-          <div class="chart-container">
-            <canvas class="mini-chart" data-chart="expired"></canvas>
-          </div>
-        </div>
-
-        <div class="insight-card low-sales-card">
-          <div class="insight-header">
-            <span class="indicator low-sales"></span>
-            <span class="title">Low Sales</span>
-            <span class="period">Weekly ▼</span>
-          </div>
-          <div class="chart-container">
-            <canvas class="mini-chart" data-chart="low-sales"></canvas>
-          </div>
-        </div>
-
-        <div class="insight-card dead-stock-card">
-          <div class="insight-header">
-            <span class="indicator dead-stock"></span>
-            <span class="title">Dead Stock</span>
-            <span class="period">Weekly ▼</span>
-          </div>
-          <div class="chart-container">
-            <canvas class="mini-chart" data-chart="dead-stock"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Overall Performance Section -->
-    <div class="performance-section">
-      <div class="section-header">
-        <h2><i class="performance-icon">📈</i> Overall Performance</h2>
-      </div>
-
-      <div class="performance-chart-container">
-        <div class="chart-legend">
-          <div class="legend-item">
-            <span class="legend-color value1"></span>
-            <span>VALUE 1 (1)</span>
-          </div>
-          <div class="legend-item">
-            <span class="legend-color value2"></span>
-            <span>VALUE 2 (2)</span>
-          </div>
-        </div>
-        <div class="main-chart-container">
-          <canvas class="main-chart" data-chart="performance"></canvas>
-        </div>
-      </div>
-    </div>
-
-    <!-- Analytics Section -->
-    <div class="analytics-section">
-      <div class="analytics-grid">
-        <!-- Warnings Donut Chart -->
-        <div class="warnings-card">
-          <h3>Warnings:</h3>
-          <div class="donut-chart-container">
-            <canvas class="donut-chart" data-chart="warnings"></canvas>
-          </div>
-          <div class="warnings-legend">
+          <!-- Warning Section -->
+          <div class="warning-section-new">
             <div class="warning-item">
-              <span class="warning-color loss"></span>
-              <span class="warning-label">Loss</span>
-              <span class="warning-percentage">35%</span>
-            </div>
-            <div class="warning-item">
-              <span class="warning-color almost-expired"></span>
-              <span class="warning-label">Almost Expired</span>
-              <span class="warning-percentage">35%</span>
-            </div>
-            <div class="warning-item">
-              <span class="warning-color low-sales"></span>
-              <span class="warning-label">Low Sales</span>
-              <span class="warning-percentage">35%</span>
-            </div>
-            <div class="warning-item">
-              <span class="warning-color dead-stock"></span>
-              <span class="warning-label">Dead Stock</span>
-              <span class="warning-percentage">35%</span>
-            </div>
-            <div class="warning-item">
-              <span class="warning-color low-prices"></span>
-              <span class="warning-label">Low Prices</span>
-              <span class="warning-percentage">35%</span>
+              <i class="pi pi-exclamation-triangle warning-icon"></i>
+              <span class="warning-label">Warning:</span>
+              <span class="warning-text">{{ product.warningType }}</span>
             </div>
           </div>
-        </div>
 
-        <!-- Profit Panel -->
-        <div class="profit-panel">
-          <div class="profit-tabs">
-            <button class="tab-btn active" data-tab="profit">
-              <i class="tab-icon">💰</i> Profit
+          <!-- Short Notice Section -->
+          <div class="notice-section-new">
+            <div class="notice-item">
+              <i class="pi pi-info-circle notice-icon"></i>
+              <span class="notice-label">Short Notice:</span>
+              <span class="notice-text">{{ product.notice }}</span>
+            </div>
+          </div>
+
+          <!-- Quick Suggestion Section -->
+          <div class="suggestion-section-new">
+            <div class="suggestion-item">
+              <i class="pi pi-lightbulb suggestion-icon"></i>
+              <span class="suggestion-label">Quick Suggestion:</span>
+              <span class="suggestion-text">{{ product.suggestion }}</span>
+            </div>
+          </div>
+
+          <!-- Card Actions -->
+          <div class="card-actions-new">
+            <button
+              class="btn-confirm-new"
+              (click)="confirmProduct(product.id)">
+              Confirm
             </button>
-            <button class="tab-btn" data-tab="expiry">
-              <i class="tab-icon">📅</i> Expiry
-            </button>
-            <button class="tab-btn" data-tab="needs">
-              <i class="tab-icon">📋</i> Needs
-            </button>
-            <button class="tab-btn" data-tab="stock">
-              <i class="tab-icon">📦</i> Stock
+            <button
+              class="btn-edit-new"
+              (click)="editProduct(product.id)">
+              Edit Product
             </button>
           </div>
+        </div>
 
-          <div class="profit-content">
-            <div class="profit-header">
-              <div class="profit-icon">💰</div>
-              <h3>Average Profit</h3>
-            </div>
-
-            <p class="profit-description">
-              Your average profit margin across all active products
+        <!-- AI Suggestions Panel -->
+        <p-card header="AI Insights & Suggestions" styleClass="suggestions-panel-card">
+          <div class="suggestions-content">
+            <p class="insight-description">
+              <i class="pi pi-info-circle"></i>
+              This product has been in stock for 17 days without sales compared to leading items, it's performing below average
             </p>
 
-            <div class="profit-value">
-              <span class="profit-sign">+</span>
-              <span class="profit-number">12.5</span>
-              <span class="profit-percent">%</span>
-            </div>
-
-            <div class="profit-comparison">
-              <span>Compared to last month: </span>
-              <span class="comparison-value positive">+3.2%</span>
-            </div>
-
-            <div class="profit-details">
-              <div class="detail-item">
-                <span class="detail-label">Best Performing Category:</span>
-                <div class="detail-value">
-                  <span>Snacks </span>
-                  <span class="category-percentage">(+23%)</span>
+            <p-panel header="Mini State Snapshot" [toggleable]="true">
+              <div class="stats-grid">
+                <div class="stat-item">
+                  <i class="pi pi-calendar"></i>
+                  <div class="stat-details">
+                    <span class="label">Last sale:</span>
+                    <span class="value">17 days ago</span>
+                  </div>
+                </div>
+                <div class="stat-item">
+                  <i class="pi pi-box"></i>
+                  <div class="stat-details">
+                    <span class="label">Remaining in stock:</span>
+                    <span class="value">24 units</span>
+                  </div>
+                </div>
+                <div class="stat-item">
+                  <i class="pi pi-exclamation-triangle"></i>
+                  <div class="stat-details">
+                    <span class="label">Urgency level:</span>
+                    <p-tag value="High" severity="danger"></p-tag>
+                  </div>
+                </div>
+                <div class="stat-item">
+                  <i class="pi pi-clock"></i>
+                  <div class="stat-details">
+                    <span class="label">Suggested Action Time:</span>
+                    <span class="value">Within 3 days</span>
+                  </div>
                 </div>
               </div>
+            </p-panel>
 
-              <div class="detail-item">
-                <span class="detail-label">Worst Performing Category:</span>
-                <div class="detail-value">
-                  <span>Household </span>
-                  <span class="category-percentage negative">(-7%)</span>
-                </div>
-              </div>
-
-              <div class="detail-item">
-                <span class="detail-label">Average Margin this week:</span>
-                <div class="detail-value">
-                  <span class="weekly-margin">+11.2%</span>
-                </div>
-              </div>
+            <div class="ai-actions">
+              <p-button
+                label="Need Any Help?"
+                icon="pi pi-question-circle"
+                styleClass="p-button-help p-button-rounded"
+                (onClick)="openAIHelp()">
+              </p-button>
+              <p-button
+                label="Ask Our Bot"
+                icon="pi pi-android"
+                styleClass="p-button-info p-button-rounded"
+                (onClick)="openChatBot()">
+              </p-button>
             </div>
           </div>
-        </div>
+        </p-card>
       </div>
-    </div>
+    </p-card>
+    </section>
+
   </main>
 </div>

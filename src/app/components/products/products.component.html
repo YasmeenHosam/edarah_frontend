@@ -1,124 +1,286 @@
-<div class="products-page">
+<div class="dashboard-container">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content">
+    <div class="products-page">
   <!-- Products Header -->
   <div class="products-header">
-    <h1><i class="products-icon">📦</i> Products</h1>
+    <div class="header-content">
+      <h1><i class="pi pi-box"></i> Products Management</h1>
+      <p class="header-subtitle">Manage and analyze your product inventory</p>
+    </div>
+    <div class="header-stats" *ngIf="!isLoading && allProducts.length > 0">
+      <div class="stat-item">
+        <span class="stat-number">{{ allProducts.length }}</span>
+        <span class="stat-label">Total Products</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">{{ getHighWarningCount() }}</span>
+        <span class="stat-label">High Warnings</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">{{ getProfitableCount() }}</span>
+        <span class="stat-label">Profitable</span>
+      </div>
+    </div>
   </div>
 
-  <!-- Filters Section -->
-  <div class="filters-section">
-    <div class="search-container">
-      <input type="text" 
-             class="search-input" 
-             placeholder="Search..." 
-             [(ngModel)]="searchTerm"
-             (input)="onSearch()">
-      <i class="search-icon">🔍</i>
+  <!-- Filters & Controls Section -->
+  <div class="filters-controls-container">
+    <div class="filters-header">
+      <div class="filters-title">
+        <i class="pi pi-filter"></i>
+        <h3>Filters & Controls</h3>
+      </div>
+      <div class="filters-stats">
+        <span class="results-count">{{ filteredProducts.length }} of {{ allProducts.length }} products</span>
+      </div>
     </div>
 
-    <div class="filter-dropdowns">
-      <select class="filter-select" [(ngModel)]="selectedWarningType" (change)="onFilterChange()">
-        <option value="">Warning Type</option>
-        <option value="High">High</option>
-        <option value="Low">Low</option>
-      </select>
+    <div class="filters-content">
+      <div class="filter-row">
+        <!-- Search Filter -->
+        <div class="filter-group search-group">
+          <label for="search">Search Products</label>
+          <div class="search-input-wrapper">
+            <i class="pi pi-search search-icon"></i>
+            <input
+              id="search"
+              type="text"
+              class="search-input"
+              [(ngModel)]="searchTerm"
+              placeholder="Search by name, category, ID..."
+              (input)="onSearch()">
+            <button
+              *ngIf="searchTerm"
+              class="clear-search-btn"
+              (click)="clearSearch()"
+              type="button">
+              <i class="pi pi-times"></i>
+            </button>
+          </div>
+        </div>
 
-      <select class="filter-select" [(ngModel)]="selectedCategory" (change)="onFilterChange()">
-        <option value="">Category</option>
-        <option value="Fruit">Fruit</option>
-        <option value="Electronics">Electronics</option>
-        <option value="Beauty">Beauty</option>
-        <option value="Snacks">Snacks</option>
-        <option value="Household">Household</option>
-      </select>
+        <!-- Warning Filter -->
+        <div class="filter-group">
+          <label for="warningFilter">Warning Level</label>
+          <p-dropdown
+            id="warningFilter"
+            [options]="warningOptions"
+            [(ngModel)]="selectedWarningType"
+            (onChange)="onFilterChange()"
+            placeholder="All Warnings"
+            styleClass="custom-dropdown">
+          </p-dropdown>
+        </div>
+
+        <!-- Category Filter -->
+        <div class="filter-group">
+          <label for="categoryFilter">Category</label>
+          <p-dropdown
+            id="categoryFilter"
+            [options]="categoryOptions"
+            [(ngModel)]="selectedCategory"
+            (onChange)="onFilterChange()"
+            placeholder="All Categories"
+            styleClass="custom-dropdown">
+          </p-dropdown>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="filter-group actions-group">
+          <label>&nbsp;</label>
+          <div class="action-buttons">
+            <button
+              class="refresh-btn"
+              (click)="refreshData()"
+              [disabled]="isLoading"
+              title="Refresh Data">
+              <i class="pi pi-refresh" [class.spinning]="isLoading"></i>
+              <span>Refresh</span>
+            </button>
+            <button
+              class="clear-filters-btn"
+              (click)="clearAllFilters()"
+              *ngIf="hasActiveFilters()"
+              title="Clear All Filters">
+              <i class="pi pi-filter-slash"></i>
+              <span>Clear</span>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <button class="refresh-btn" (click)="refreshData()">
-      Refresh
-    </button>
   </div>
+
+  <!-- Loading Indicator -->
+  <div *ngIf="isLoading" class="loading-container">
+    <p-progressSpinner styleClass="w-4rem h-4rem"></p-progressSpinner>
+    <p>Loading products from AI Table...</p>
+    <small>Fetching data from /api/dashboard/ai-table</small>
+  </div>
+
+
 
   <!-- Products Table -->
-  <div class="table-container">
-    <table class="products-table">
-      <thead>
+  <div *ngIf="!isLoading" class="products-table-container">
+    <!-- Table Header -->
+    <div class="table-header-section">
+      <div class="table-header-content">
+        <div class="table-title-group">
+          <div class="table-icon">
+            <i class="pi pi-table"></i>
+          </div>
+          <div class="table-title-info">
+            <h3>Product Inventory</h3>
+            <p>Manage and analyze your product data</p>
+          </div>
+        </div>
+        <div class="table-stats">
+          <div class="stat-badge">
+            <span class="stat-number">{{ filteredProducts.length }}</span>
+            <span class="stat-label">Products</span>
+          </div>
+          <div class="stat-badge">
+            <span class="stat-number">{{ getHighWarningCount() }}</span>
+            <span class="stat-label">High Risk</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Enhanced Table -->
+    <div class="table-content">
+      <p-table
+        [value]="filteredProducts"
+        [paginator]="true"
+        [rows]="itemsPerPage"
+        [totalRecords]="filteredProducts.length"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [sortField]="sortColumn"
+        [sortOrder]="sortDirection === 'asc' ? 1 : -1"
+        styleClass="modern-table"
+        [globalFilterFields]="['name', 'category', 'price', 'sales']"
+        responsiveLayout="scroll"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products">
+
+        <!-- Quick Search in Table -->
+        <ng-template pTemplate="caption">
+          <div class="table-caption">
+            <div class="table-search-wrapper">
+              <i class="pi pi-search table-search-icon"></i>
+              <input
+                type="text"
+                class="table-search-input"
+                [(ngModel)]="searchTerm"
+                placeholder="Quick search in table..."
+                (input)="onSearch()" />
+              <button
+                *ngIf="searchTerm"
+                class="clear-table-search"
+                (click)="clearSearch()"
+                type="button">
+                <i class="pi pi-times"></i>
+              </button>
+            </div>
+            <div class="table-actions">
+              <button class="table-action-btn export-btn" title="Export Data">
+                <i class="pi pi-download"></i>
+                <span>Export</span>
+              </button>
+              <button class="table-action-btn view-toggle-btn" title="Toggle View">
+                <i class="pi pi-th-large"></i>
+                <span>View</span>
+              </button>
+            </div>
+          </div>
+        </ng-template>
+
+      <ng-template pTemplate="header">
         <tr>
-          <th (click)="sortBy('name')" class="sortable">
-            Name
-            <span class="sort-indicator" [ngClass]="getSortClass('name')">↕️</span>
+          <th pSortableColumn="name">
+            Name <p-sortIcon field="name"></p-sortIcon>
           </th>
-          <th (click)="sortBy('category')" class="sortable">
-            Category
-            <span class="sort-indicator" [ngClass]="getSortClass('category')">↕️</span>
+          <th pSortableColumn="category">
+            Category <p-sortIcon field="category"></p-sortIcon>
           </th>
-          <th (click)="sortBy('price')" class="sortable">
-            Price
-            <span class="sort-indicator" [ngClass]="getSortClass('price')">↕️</span>
+          <th pSortableColumn="price">
+            Price <p-sortIcon field="price"></p-sortIcon>
           </th>
-          <th (click)="sortBy('sales')" class="sortable">
-            Sales
-            <span class="sort-indicator" [ngClass]="getSortClass('sales')">↕️</span>
+          <th pSortableColumn="sales">
+            Sales <p-sortIcon field="sales"></p-sortIcon>
           </th>
-          <th (click)="sortBy('expiryDate')" class="sortable">
-            Expiry date
-            <span class="sort-indicator" [ngClass]="getSortClass('expiryDate')">↕️</span>
+          <th pSortableColumn="expiryDate">
+            Expiry Date <p-sortIcon field="expiryDate"></p-sortIcon>
           </th>
-          <th (click)="sortBy('avgProfit')" class="sortable">
-            Avg. profit
-            <span class="sort-indicator" [ngClass]="getSortClass('avgProfit')">↕️</span>
+          <th pSortableColumn="avgProfit">
+            Avg. Profit <p-sortIcon field="avgProfit"></p-sortIcon>
           </th>
           <th>Warning</th>
-          <th>Procedure</th>
+          <th>Actions</th>
         </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let product of filteredProducts" class="product-row">
-          <td class="product-name">{{ product.name }}</td>
-          <td class="product-category">{{ product.category }}</td>
-          <td class="product-price">{{ product.price }}</td>
-          <td class="product-sales">{{ product.sales }}</td>
-          <td class="product-expiry">{{ product.expiryDate }}</td>
-          <td class="product-profit" [ngClass]="getProfitClass(product.avgProfit)">
-            {{ product.avgProfit }}
+      </ng-template>
+
+      <ng-template pTemplate="body" let-product let-rowIndex="rowIndex">
+        <tr>
+          <td>
+            <strong>{{ product.name }}</strong>
           </td>
-          <td class="product-warning">
-            <span class="warning-badge" [ngClass]="getWarningClass(product.warning)">
-              <i class="warning-icon">⚠️</i>
-              {{ product.warning }}
-            </span>
+          <td>
+            <p-tag [value]="product.category" severity="info"></p-tag>
           </td>
-          <td class="product-procedure">
-            <button class="analyze-btn" (click)="analyzeProduct(product.id)">
-              Analyze
-            </button>
+          <td>
+            <strong>{{ product.price }}</strong>
+          </td>
+          <td>
+            <p-tag
+              [value]="product.sales"
+              [severity]="getSalesSeverity(product.sales)">
+            </p-tag>
+          </td>
+          <td>
+            {{ product.expiryDate }}
+          </td>
+          <td>
+            <p-tag
+              [value]="product.avgProfit"
+              [severity]="getProfitSeverity(product.avgProfit)">
+            </p-tag>
+          </td>
+          <td>
+            <p-tag
+              [value]="product.warning"
+              [severity]="getWarningSeverity(product.warning)">
+            </p-tag>
+          </td>
+          <td>
+            <p-button
+              icon="pi pi-search"
+              label="Analyze"
+              styleClass="p-button-sm p-button-outlined"
+              (onClick)="analyzeProduct(product.id)"
+              pTooltip="Analyze this product">
+            </p-button>
           </td>
         </tr>
-      </tbody>
-    </table>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="8" class="text-center">
+            <div class="empty-state">
+              <i class="pi pi-inbox" style="font-size: 3rem; color: #ccc;"></i>
+              <h4>No products found</h4>
+              <p>{{ allProducts.length === 0 ? 'No products loaded from API' : 'No products match current filters' }}</p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    </div>
   </div>
 
-  <!-- Empty State -->
-  <div *ngIf="filteredProducts.length === 0" class="empty-state">
-    <div class="empty-icon">📦</div>
-    <h3>No products found</h3>
-    <p>Try adjusting your search or filter criteria</p>
-  </div>
-
-  <!-- Pagination -->
-  <div class="pagination" *ngIf="filteredProducts.length > 0">
-    <button class="page-btn" 
-            [disabled]="currentPage === 1" 
-            (click)="goToPage(currentPage - 1)">
-      Previous
-    </button>
-    
-    <span class="page-info">
-      Page {{ currentPage }} of {{ totalPages }}
-    </span>
-    
-    <button class="page-btn" 
-            [disabled]="currentPage === totalPages" 
-            (click)="goToPage(currentPage + 1)">
-      Next
-    </button>
-  </div>
+    </div>
+  </main>
 </div>

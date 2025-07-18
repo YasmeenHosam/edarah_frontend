@@ -1,0 +1,155 @@
+/* ===== DROPDOWN VISIBILITY FIX ===== */
+/* This file contains additional CSS to ensure PrimeNG dropdowns are visible */
+
+/* Global dropdown panel fix */
+:host ::ng-deep .p-dropdown-panel {
+  z-index: 10000 !important;
+  position: absolute !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+  border: 2px solid #e5e7eb !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  margin-top: 4px !important;
+}
+
+/* Dropdown items wrapper */
+:host ::ng-deep .p-dropdown-items-wrapper {
+  max-height: 200px !important;
+  overflow-y: auto !important;
+}
+
+/* Individual dropdown items */
+:host ::ng-deep .p-dropdown-item {
+  padding: 0.75rem 1rem !important;
+  font-size: 0.875rem !important;
+  color: #374151 !important;
+  transition: all 0.2s ease !important;
+  border: none !important;
+  cursor: pointer !important;
+}
+
+/* Dropdown item hover state */
+:host ::ng-deep .p-dropdown-item:hover {
+  background: #f3f4f6 !important;
+  color: #667eea !important;
+}
+
+/* Selected dropdown item */
+:host ::ng-deep .p-dropdown-item.p-highlight {
+  background: #667eea !important;
+  color: white !important;
+}
+
+/* Selected dropdown item hover */
+:host ::ng-deep .p-dropdown-item.p-highlight:hover {
+  background: #5a67d8 !important;
+}
+
+/* Dropdown trigger button */
+:host ::ng-deep .p-dropdown .p-dropdown-trigger {
+  color: #6b7280 !important;
+  width: 2.5rem !important;
+}
+
+/* Dropdown label */
+:host ::ng-deep .p-dropdown .p-dropdown-label {
+  padding: 0.875rem 1rem !important;
+  font-size: 0.875rem !important;
+  color: #374151 !important;
+}
+
+/* Dropdown focus state */
+:host ::ng-deep .p-dropdown:not(.p-disabled).p-focus {
+  border-color: #667eea !important;
+  background: white !important;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1) !important;
+}
+
+/* Dropdown hover state */
+:host ::ng-deep .p-dropdown:not(.p-disabled):hover {
+  border-color: #d1d5db !important;
+}
+
+/* Container positioning fix */
+:host ::ng-deep .filters-controls-container {
+  position: relative !important;
+  z-index: 10 !important;
+  overflow: visible !important;
+}
+
+/* Filter group positioning */
+:host ::ng-deep .filter-group {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Ensure dropdown doesn't get clipped */
+:host ::ng-deep .filters-content {
+  position: relative !important;
+  z-index: 5 !important;
+  overflow: visible !important;
+}
+
+/* Fix for mobile dropdown */
+@media (max-width: 768px) {
+  :host ::ng-deep .p-dropdown-panel {
+    position: fixed !important;
+    z-index: 10001 !important;
+  }
+}
+
+/* Scrollbar styling for dropdown */
+:host ::ng-deep .p-dropdown-items-wrapper::-webkit-scrollbar {
+  width: 6px;
+}
+
+:host ::ng-deep .p-dropdown-items-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+:host ::ng-deep .p-dropdown-items-wrapper::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+:host ::ng-deep .p-dropdown-items-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Animation for dropdown appearance */
+:host ::ng-deep .p-dropdown-panel {
+  animation: dropdownFadeIn 0.2s ease-out;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fix for dropdown overlay */
+:host ::ng-deep .p-component-overlay {
+  z-index: 9999 !important;
+}
+
+/* Ensure dropdown is above table */
+:host ::ng-deep .products-table-card {
+  z-index: 1 !important;
+}
+
+/* Fix for dropdown in different containers */
+:host ::ng-deep .p-dropdown {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* Additional fix for PrimeNG overlay */
+:host ::ng-deep .p-dropdown-panel.p-component {
+  z-index: 10000 !important;
+}

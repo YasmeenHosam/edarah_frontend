@@ -39,40 +39,18 @@
 
 .logo-icon {
   position: relative;
-  width: 60px;
-  height: 60px;
+  width: 300px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.house-icon {
-  width: 60px;
-  height: 60px;
-  background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+.logo-image {
+  width: 300px;
+  height: 300px;
+  object-fit: contain;
   border-radius: 12px;
-  position: relative;
-}
-
-.house-icon::before {
-  content: '';
-  position: absolute;
-  top: 15px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
-  border-bottom: 12px solid #ffffff;
-}
-
-.house-icon::after {
-  content: 'ED';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-  font-weight: bold;
-  font-size: 16px;
 }
 
 .logo-text {
@@ -407,6 +385,139 @@
   line-height: 1.5;
 }
 
+.recommendation-content {
+  margin-bottom: 1rem;
+}
+
+.recommendation-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.expand-btn {
+  background: #1976d2;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.expand-btn:hover:not(:disabled) {
+  background: #1565c0;
+  transform: translateY(-1px);
+}
+
+.expand-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.loading-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.loading-text::after {
+  content: '';
+  width: 12px;
+  height: 12px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.expanded-recommendation {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.expanded-section {
+  margin-bottom: 1rem;
+}
+
+.expanded-section:last-child {
+  margin-bottom: 0;
+}
+
+.expanded-section h4 {
+  color: #1976d2;
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.expanded-section p {
+  margin: 0;
+  line-height: 1.6;
+  color: #555;
+}
+
+.actions-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.actions-list li {
+  background: #f0f7ff;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+  border-left: 3px solid #1976d2;
+  font-size: 0.9rem;
+}
+
+.confidence-section {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: #f8f9fa;
+  border-radius: 4px;
+  margin-top: 1rem;
+}
+
+.confidence-label {
+  font-weight: 600;
+  color: #666;
+}
+
+.confidence-value {
+  background: #1976d2;
+  color: white;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
 .query-container {
   background: #f8f9fa;
   border-radius: 8px;
@@ -474,5 +585,122 @@
     flex-direction: column;
     gap: 0.5rem;
     text-align: center;
+  }
+
+  .marketing-plan-card {
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+  }
+
+  .marketing-plan-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+/* Marketing Plan Section */
+.marketing-plan-section {
+  margin-bottom: 2rem;
+}
+
+.marketing-plan-card {
+  background: linear-gradient(135deg, #1A6DC0 0%, #0C335A 100%);
+  border-radius: 16px;
+  padding: 2rem;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 8px 32px rgba(26, 109, 192, 0.3);
+  transition: all 0.3s ease;
+}
+
+.marketing-plan-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(26, 109, 192, 0.4);
+}
+
+.marketing-plan-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex: 1;
+}
+
+.marketing-plan-icon {
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.marketing-plan-content h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.marketing-plan-content p {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 1rem;
+}
+
+.marketing-plan-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  backdrop-filter: blur(10px);
+}
+
+.marketing-plan-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateX(4px);
+}
+
+.marketing-plan-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive styles for recommendation expansion */
+@media (max-width: 768px) {
+  .recommendation-actions {
+    justify-content: center;
+  }
+
+  .expand-btn {
+    width: 100%;
+    max-width: 200px;
+  }
+
+  .expanded-recommendation {
+    padding: 0.75rem;
+  }
+
+  .expanded-section h4 {
+    font-size: 0.9rem;
+  }
+
+  .confidence-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
   }
 }

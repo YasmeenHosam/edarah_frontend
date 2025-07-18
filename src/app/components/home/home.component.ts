@@ -1,7 +1,8 @@
-import { Component, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { LoadingScreenComponent } from '../shared/loading-screen/loading-screen.component';
 
 // Import section components
 import { HeroSectionComponent } from './sections/hero-section.component';
@@ -21,6 +22,7 @@ import { ContactSectionComponent } from './sections/contact-section.component';
   imports: [
     CommonModule,
     FormsModule,
+    LoadingScreenComponent,
     HeroSectionComponent,
     WhyUsSectionComponent,
     FeaturesSectionComponent,
@@ -36,7 +38,25 @@ import { ContactSectionComponent } from './sections/contact-section.component';
 export class HomeComponent implements AfterViewInit, OnDestroy {
   private observer!: IntersectionObserver;
 
+  // Loading screen state
+  showLoadingScreen = true;
+  contentReady = false;
+
+  @ViewChild(LoadingScreenComponent) loadingScreen!: LoadingScreenComponent;
+
   constructor(private router: Router) {}
+
+  // Handle loading screen completion
+  onLoadingComplete() {
+    this.showLoadingScreen = false;
+    this.contentReady = true;
+
+    // Trigger content animations after loading screen disappears
+    setTimeout(() => {
+      this.setupIntersectionObserver();
+      this.setupMadeForAnimations();
+    }, 100);
+  }
 
   scrollToSection(sectionId: string) {
     const element = document.getElementById(sectionId);
@@ -56,11 +76,22 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.setupIntersectionObserver();
-    // Add a small delay to ensure DOM is fully rendered
+    // Only setup animations if loading screen is not shown
+    if (!this.showLoadingScreen) {
+      this.setupIntersectionObserver();
+      // Add a small delay to ensure DOM is fully rendered
+      setTimeout(() => {
+        this.setupMadeForAnimations();
+      }, 100);
+    }
+
+    // Simulate content loading completion and notify loading screen
     setTimeout(() => {
-      this.setupMadeForAnimations();
-    }, 100);
+      this.contentReady = true;
+      if (this.loadingScreen) {
+        this.loadingScreen.onContentReady();
+      }
+    }, 800); // Content ready signal (loading screen will still show for full 1.5s)
   }
 
   ngOnDestroy() {

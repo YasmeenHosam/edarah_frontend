@@ -1,4 +1,14 @@
 
+<!-- Loading Screen (only on home page) -->
+<app-loading-screen
+  #loadingScreen
+  *ngIf="showLoadingScreen"
+  (loadingComplete)="onLoadingComplete()">
+</app-loading-screen>
+
+<!-- Main Content (hidden during loading) -->
+<div class="home-content" [class.content-ready]="contentReady" *ngIf="!showLoadingScreen">
+
 <!-- Hero Section -->
 <app-hero-section
   (getStarted)="onGetStarted()"
@@ -139,3 +149,5 @@
     </div>
   </div>
 </footer>
+
+</div> <!-- End of home-content -->

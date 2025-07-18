@@ -1,0 +1,54 @@
+<div class="loading-screen" 
+     [class.visible]="isVisible" 
+     [class.exiting]="isExiting"
+     *ngIf="isVisible">
+  
+  <!-- Loading Content Container -->
+  <div class="loading-content">
+    
+    <!-- Logo Container -->
+    <div class="logo-container" [class.loaded]="logoLoaded">
+      <img src="/assets/images/logo.png" 
+           alt="Edarah Logo" 
+           class="loading-logo"
+           (load)="logoLoaded = true">
+      
+      <!-- Pulse Ring Effect -->
+      <div class="pulse-ring"></div>
+      <div class="pulse-ring pulse-ring-delayed"></div>
+    </div>
+    
+    <!-- Loading Spinner -->
+    <div class="spinner-container" [class.visible]="logoLoaded">
+      <div class="loading-spinner">
+        <div class="spinner-segment"></div>
+        <div class="spinner-segment"></div>
+        <div class="spinner-segment"></div>
+        <div class="spinner-segment"></div>
+        <div class="spinner-segment"></div>
+        <div class="spinner-segment"></div>
+        <div class="spinner-segment"></div>
+        <div class="spinner-segment"></div>
+      </div>
+    </div>
+    
+    <!-- Loading Text -->
+    <div class="loading-text" [class.visible]="textVisible">
+      <p>Now Loading</p>
+      <div class="loading-dots">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+
+      <!-- Progress indicator -->
+      <div class="progress-container" [class.visible]="textVisible">
+        <div class="progress-bar">
+          <div class="progress-fill"></div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+</div>

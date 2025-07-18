@@ -1,11 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface AnalysisRequest {
   databaseId: string;
   question: string;
   conversationLanguage: string;
+}
+
+export interface MarketingPlanRequest {
+  databaseId: string;
+  generateImage: boolean;
 }
 
 export interface KeyMetrics {
@@ -49,11 +55,34 @@ export interface AnalysisResponse {
   rateLimit: RateLimit;
 }
 
+export interface MarketingPlanResponse {
+  success: boolean;
+  plan: string;
+  imageUrl: string;
+  query: string;
+  rateLimit: RateLimit;
+}
+
+export interface RecommendationExplainRequest {
+  recommendation: string;
+}
+
+export interface RecommendationExplainResponse {
+  success: boolean;
+  message: string;
+  data: {
+    insights: string;
+    availableActions: string[];
+    reasoning: string;
+    confidence: number;
+  };
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class AIAssistantService {
-  private apiUrl = 'http://13.38.195.203:3000/api/rag';
+  private apiUrl = `${environment.apiUrl}/api/rag`;
 
   constructor(private http: HttpClient) {}
 
@@ -65,5 +94,25 @@ export class AIAssistantService {
     });
 
     return this.http.post<AnalysisResponse>(`${this.apiUrl}/analyze`, request, { headers });
+  }
+
+  getMarketingPlan(request: MarketingPlanRequest): Observable<MarketingPlanResponse> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.post<MarketingPlanResponse>(`${this.apiUrl}/marketing-plan`, request, { headers });
+  }
+
+  explainRecommendation(request: RecommendationExplainRequest): Observable<RecommendationExplainResponse> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.post<RecommendationExplainResponse>(`${this.apiUrl}/recommendation/explain`, request, { headers });
   }
 }

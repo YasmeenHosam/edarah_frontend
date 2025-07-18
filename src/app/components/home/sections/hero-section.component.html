@@ -23,8 +23,84 @@
           </button>
         </div>
       </div>
-      <div class="hero-visual">
-        <!-- Visual content removed -->
+      <div class="hero-visual" style="display: none;">
+        <!-- Zigzag Animation -->
+        <div class="zigzag-animation">
+          <svg viewBox="0 -200 1000 600" xmlns="http://www.w3.org/2000/svg" class="zigzag-svg">
+
+            <!-- Triangle sides without bases - with much larger height differences -->
+            <!-- Triangle 1 - left and right sides only -->
+            <line x1="100" y1="350" x2="150" y2="280" stroke="white" stroke-width="2" class="zigzag-line"/>
+            <line x1="150" y1="280" x2="200" y2="350" stroke="white" stroke-width="2" class="zigzag-line"/>
+
+            <!-- Triangle 2 - left and right sides only -->
+            <line x1="300" y1="350" x2="350" y2="180" stroke="white" stroke-width="2" class="zigzag-line"/>
+            <line x1="350" y1="180" x2="400" y2="350" stroke="white" stroke-width="2" class="zigzag-line"/>
+
+            <!-- Triangle 3 - left and right sides only -->
+            <line x1="500" y1="350" x2="550" y2="80" stroke="white" stroke-width="2" class="zigzag-line"/>
+            <line x1="550" y1="80" x2="600" y2="350" stroke="white" stroke-width="2" class="zigzag-line"/>
+
+            <!-- Triangle 4 - left side only (no right side going down) -->
+            <line x1="700" y1="350" x2="750" y2="20" stroke="white" stroke-width="2" class="zigzag-line"/>
+
+            <!-- Ground line connections between triangles -->
+            <line x1="50" y1="350" x2="100" y2="350" stroke="white" stroke-width="2" class="zigzag-line"/>
+            <line x1="200" y1="350" x2="300" y2="350" stroke="white" stroke-width="2" class="zigzag-line"/>
+            <line x1="400" y1="350" x2="500" y2="350" stroke="white" stroke-width="2" class="zigzag-line"/>
+            <line x1="600" y1="350" x2="700" y2="350" stroke="white" stroke-width="2" class="zigzag-line"/>
+            <line x1="800" y1="350" x2="850" y2="350" stroke="white" stroke-width="2" class="zigzag-line"/>
+
+            <!-- Connection lines to icons from triangle peaks with much larger heights -->
+            <line x1="150" y1="280" x2="150" y2="260" stroke="white" stroke-width="1.5" class="zigzag-line"/>
+            <line x1="350" y1="180" x2="350" y2="160" stroke="white" stroke-width="1.5" class="zigzag-line"/>
+            <line x1="550" y1="80" x2="550" y2="60" stroke="white" stroke-width="1.5" class="zigzag-line"/>
+
+            <!-- Dots at triangle peaks with much larger height differences -->
+            <circle cx="150" cy="280" r="4" fill="white" class="dot"/>
+            <circle cx="350" cy="180" r="4" fill="white" class="dot"/>
+            <circle cx="550" cy="80" r="4" fill="white" class="dot"/>
+            <circle cx="750" cy="20" r="4" fill="white" class="dot"/>
+
+            <!-- Icons using foreignObject positioned above triangle peaks -->
+            <foreignObject x="70" y="120" width="160" height="200">
+              <div xmlns="http://www.w3.org/1999/xhtml">
+                <div class="label label-1">Smart Pricing</div>
+                <div class="pulse-icon icon-1">
+                  <img src="/assets/icons/features/smart_pricing.png" alt="Smart Pricing" />
+                </div>
+              </div>
+            </foreignObject>
+
+            <foreignObject x="270" y="20" width="160" height="200">
+              <div xmlns="http://www.w3.org/1999/xhtml">
+                <div class="label label-2">Risk Alerts</div>
+                <div class="pulse-icon icon-2">
+                  <img src="/assets/icons/features/risk_alerts.png" alt="Risk Alerts" />
+                </div>
+              </div>
+            </foreignObject>
+
+            <foreignObject x="470" y="-80" width="160" height="200">
+              <div xmlns="http://www.w3.org/1999/xhtml">
+                <div class="label label-3">Support Businesses</div>
+                <div class="pulse-icon icon-3">
+                  <img src="/assets/icons/features/ai_powered.png" alt="Support Businesses" />
+                </div>
+              </div>
+            </foreignObject>
+
+            <foreignObject x="670" y="-140" width="160" height="200">
+              <div xmlns="http://www.w3.org/1999/xhtml">
+                <div class="label label-4">Increase Sales</div>
+                <div class="pulse-icon icon-4">
+                  <img src="/assets/icons/features/easy_store.png" alt="Increase Sales" />
+                </div>
+              </div>
+            </foreignObject>
+
+          </svg>
+        </div>
       </div>
     </div>
   </div>

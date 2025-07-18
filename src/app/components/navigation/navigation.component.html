@@ -28,14 +28,15 @@
     <div class="navbar-actions">
       @if (currentUser) {
         <div class="user-menu">
-          <button class="user-menu-button" (click)="toggleUserMenu()">
-            Welcome, {{ currentUser.first_name }}
-            <svg class="chevron-down" [class.rotated]="isUserMenuOpen" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"></path></svg>
-          </button>
-          <div class="user-menu-dropdown" [class.active]="isUserMenuOpen">
-            <a routerLink="/profile" class="dropdown-item" (click)="closeUserMenu()">Profile</a>
-            <a (click)="logout(); closeUserMenu()" class="dropdown-item">Logout</a>
-          </div>
+          <a routerLink="/dashboard" class="user-menu-button">
+            <div class="user-avatar">
+              <svg class="user-icon" viewBox="0 0 24 24" fill="none">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span class="welcome-text">Welcome, {{ currentUser.first_name }}</span>
+          </a>
         </div>
       } @else {
         <a routerLink="/auth" [queryParams]="{tab: 'signin'}" class="btn btn-login">Sign In</a>
@@ -69,7 +70,7 @@
         @if (currentUser) {
           <div class="mobile-user-info">
             <span>Welcome, {{ currentUser.first_name }}</span>
-            <a routerLink="/profile" class="mobile-btn mobile-btn-profile" (click)="closeMobileMenu()">Profile</a>
+            <a routerLink="/dashboard" class="mobile-btn mobile-btn-dashboard" (click)="closeMobileMenu()">Dashboard</a>
             <button (click)="logout(); closeMobileMenu()" class="mobile-btn mobile-btn-logout">Logout</button>
           </div>
         } @else {

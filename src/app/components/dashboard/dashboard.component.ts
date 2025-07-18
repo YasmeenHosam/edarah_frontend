@@ -4,10 +4,46 @@ import { RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { SidebarComponent } from '../shared/sidebar/sidebar.component';
 
+// PrimeNG Imports
+import { CardModule } from 'primeng/card';
+import { ChartModule } from 'primeng/chart';
+import { ButtonModule } from 'primeng/button';
+import { TagModule } from 'primeng/tag';
+import { BadgeModule } from 'primeng/badge';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { KnobModule } from 'primeng/knob';
+import { TableModule } from 'primeng/table';
+import { InputTextModule } from 'primeng/inputtext';
+import { DropdownModule } from 'primeng/dropdown';
+import { TabViewModule } from 'primeng/tabview';
+import { PanelModule } from 'primeng/panel';
+import { DividerModule } from 'primeng/divider';
+import { AvatarModule } from 'primeng/avatar';
+import { SkeletonModule } from 'primeng/skeleton';
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, SidebarComponent],
+  imports: [
+    CommonModule,
+    RouterModule,
+    SidebarComponent,
+    CardModule,
+    ChartModule,
+    ButtonModule,
+    TagModule,
+    BadgeModule,
+    ProgressBarModule,
+    KnobModule,
+    TableModule,
+    InputTextModule,
+    DropdownModule,
+    TabViewModule,
+    PanelModule,
+    DividerModule,
+    AvatarModule,
+    SkeletonModule
+  ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
@@ -98,6 +134,38 @@ export class DashboardComponent implements OnInit {
 
   activeTab = 'profit';
 
+  // PrimeNG Chart Data
+  chartData: any;
+  chartOptions: any;
+
+  donutData: any;
+  donutOptions: any;
+
+  lineData: any;
+  lineOptions: any;
+
+  barData: any;
+  barOptions: any;
+
+  // Dropdown options
+  warningTypes = [
+    { label: 'All Types', value: 'all' },
+    { label: 'Low Stock', value: 'low_stock' },
+    { label: 'Expiry Risk', value: 'expiry' },
+    { label: 'Loss Risk', value: 'loss' },
+    { label: 'Dead Stock', value: 'dead_stock' },
+    { label: 'Low Prices', value: 'low_prices' }
+  ];
+
+  categories = [
+    { label: 'All Categories', value: 'all' },
+    { label: 'Electronics', value: 'electronics' },
+    { label: 'Health', value: 'health' },
+    { label: 'Home', value: 'home' },
+    { label: 'Snacks', value: 'snacks' },
+    { label: 'Household', value: 'household' }
+  ];
+
   menuItems = [
     {
       id: 'dashboard',
@@ -153,6 +221,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
+    this.initializePrimeNGCharts();
     this.initializeCharts();
     this.initializeAnimations();
   }
@@ -191,7 +260,54 @@ export class DashboardComponent implements OnInit {
 
   refreshData() {
     console.log('Refreshing dashboard data...');
-    // Add refresh logic here
+
+    // Add loading animation to all cards
+    this.addRefreshAnimation();
+
+    // Simulate data refresh
+    setTimeout(() => {
+      this.removeRefreshAnimation();
+      console.log('Data refreshed successfully');
+    }, 2000);
+  }
+
+  getTagSeverity(warningLevel: string): 'success' | 'info' | 'warning' | 'danger' | 'secondary' | 'contrast' {
+    switch (warningLevel) {
+      case 'danger':
+        return 'danger';
+      case 'warning':
+        return 'warning';
+      case 'info':
+        return 'info';
+      default:
+        return 'secondary';
+    }
+  }
+
+  openAIHelp() {
+    console.log('Opening AI Help...');
+    // Navigate to AI assistant or open help modal
+  }
+
+  openChatBot() {
+    console.log('Opening Chat Bot...');
+    // Open chat bot interface
+  }
+
+  private addRefreshAnimation() {
+    const cards = document.querySelectorAll('.product-card, .insight-card, .warnings-card, .profit-panel');
+    cards.forEach(card => {
+      card.classList.add('animate-pulse');
+      (card as HTMLElement).style.opacity = '0.7';
+    });
+  }
+
+  private removeRefreshAnimation() {
+    const cards = document.querySelectorAll('.product-card, .insight-card, .warnings-card, .profit-panel');
+    cards.forEach(card => {
+      card.classList.remove('animate-pulse');
+      (card as HTMLElement).style.opacity = '1';
+    });
   }
 
   askAIHelp() {
@@ -287,6 +403,34 @@ export class DashboardComponent implements OnInit {
       setTimeout(() => {
         card.classList.add('animated');
       }, 600 + (index * 80));
+    });
+
+    // Animate profit panel and warnings card
+    const profitPanel = document.querySelector('.profit-panel');
+    if (profitPanel) {
+      setTimeout(() => {
+        profitPanel.classList.add('animated');
+      }, 800);
+    }
+
+    const warningsCard = document.querySelector('.warnings-card');
+    if (warningsCard) {
+      setTimeout(() => {
+        warningsCard.classList.add('animated');
+      }, 900);
+    }
+
+    // Add loading effect to buttons
+    this.addButtonLoadingEffects();
+  }
+
+  private addButtonLoadingEffects() {
+    // Add pulse effect to AI help buttons
+    const aiButtons = document.querySelectorAll('.btn-ai-help');
+    aiButtons.forEach(button => {
+      setTimeout(() => {
+        button.classList.add('animate-pulse');
+      }, 1200);
     });
   }
 
@@ -494,4 +638,151 @@ export class DashboardComponent implements OnInit {
     // - needs: inventory needs
     // - stock: stock levels
   }
+
+  private initializePrimeNGCharts() {
+    // Donut Chart for Warnings
+    this.donutData = {
+      labels: ['Loss', 'Almost Expired', 'Low Sales', 'Dead Stock', 'Low Prices'],
+      datasets: [
+        {
+          data: [35, 25, 20, 15, 5],
+          backgroundColor: [
+            '#ef4444',
+            '#f59e0b',
+            '#3b82f6',
+            '#6b7280',
+            '#8b5cf6'
+          ],
+          hoverBackgroundColor: [
+            '#dc2626',
+            '#d97706',
+            '#2563eb',
+            '#4b5563',
+            '#7c3aed'
+          ]
+        }
+      ]
+    };
+
+    this.donutOptions = {
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            usePointStyle: true,
+            padding: 20,
+            font: {
+              size: 12
+            }
+          }
+        }
+      },
+      responsive: true,
+      maintainAspectRatio: false
+    };
+
+    // Line Chart for Performance
+    this.lineData = {
+      labels: ['10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00'],
+      datasets: [
+        {
+          label: 'Sales Performance',
+          data: [80, 85, 78, 92, 88, 95, 90, 87, 93, 89],
+          fill: true,
+          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          borderColor: '#3b82f6',
+          tension: 0.4,
+          pointBackgroundColor: '#3b82f6',
+          pointBorderColor: '#ffffff',
+          pointBorderWidth: 2,
+          pointRadius: 5
+        },
+        {
+          label: 'Profit Margin',
+          data: [70, 75, 68, 82, 78, 85, 80, 77, 83, 79],
+          fill: true,
+          backgroundColor: 'rgba(239, 68, 68, 0.1)',
+          borderColor: '#ef4444',
+          tension: 0.4,
+          pointBackgroundColor: '#ef4444',
+          pointBorderColor: '#ffffff',
+          pointBorderWidth: 2,
+          pointRadius: 5
+        }
+      ]
+    };
+
+    this.lineOptions = {
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: {
+            usePointStyle: true,
+            padding: 20
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: {
+            color: '#e5e7eb'
+          }
+        },
+        y: {
+          grid: {
+            color: '#e5e7eb'
+          },
+          beginAtZero: true,
+          max: 100
+        }
+      },
+      responsive: true,
+      maintainAspectRatio: false
+    };
+
+    // Bar Chart for Categories
+    this.barData = {
+      labels: ['Electronics', 'Health', 'Home', 'Snacks', 'Household'],
+      datasets: [
+        {
+          label: 'Sales',
+          data: [65, 59, 80, 81, 56],
+          backgroundColor: '#3b82f6',
+          borderColor: '#1d4ed8',
+          borderWidth: 1
+        },
+        {
+          label: 'Profit',
+          data: [28, 48, 40, 19, 86],
+          backgroundColor: '#10b981',
+          borderColor: '#059669',
+          borderWidth: 1
+        }
+      ]
+    };
+
+    this.barOptions = {
+      plugins: {
+        legend: {
+          position: 'top'
+        }
+      },
+      scales: {
+        x: {
+          grid: {
+            color: '#e5e7eb'
+          }
+        },
+        y: {
+          grid: {
+            color: '#e5e7eb'
+          },
+          beginAtZero: true
+        }
+      },
+      responsive: true,
+      maintainAspectRatio: false
+    };
+  }
+
 }

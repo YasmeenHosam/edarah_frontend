@@ -8,9 +8,9 @@
     <div class="logo-container">
       <div class="logo">
         <div class="logo-icon">
-          <div class="house-icon"></div>
+          <img src="/assets/images/logo.png" alt="Edarah Logo" class="logo-image">
         </div>
-        <div class="logo-text">Edarah</div>
+        <div class="logo-text"></div>
       </div>
     </div>
     
@@ -23,12 +23,40 @@
   <!-- Quick Questions Section -->
   <div class="quick-questions-section">
     <div class="quick-questions-grid">
-      <button 
-        *ngFor="let question of quickQuestions" 
+      <button
+        *ngFor="let question of quickQuestions"
         class="quick-question-btn"
         (click)="selectQuickQuestion(question)"
         [disabled]="isAnalyzing">
         {{ question }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Marketing Plan Section -->
+  <div class="marketing-plan-section">
+    <div class="marketing-plan-card">
+      <div class="marketing-plan-header">
+        <div class="marketing-plan-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M2 17l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="marketing-plan-content">
+          <h3>Marketing Plan Generator</h3>
+          <p>Generate comprehensive marketing strategies based on your database</p>
+        </div>
+      </div>
+      <button
+        class="marketing-plan-btn"
+        (click)="goToMarketingPlan()"
+        [disabled]="isAnalyzing">
+        Generate Marketing Plan
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </button>
     </div>
   </div>
@@ -143,8 +171,45 @@
     <div class="recommendations-card">
       <h3>Recommendations</h3>
       <ul class="recommendations-list">
-        <li *ngFor="let recommendation of analysisResult.data.recommendations" class="recommendation-item">
-          {{ recommendation }}
+        <li *ngFor="let recommendation of analysisResult.data.recommendations; let i = index" class="recommendation-item">
+          <div class="recommendation-content">
+            {{ recommendation }}
+          </div>
+          <div class="recommendation-actions">
+            <button
+              class="expand-btn"
+              (click)="expandRecommendation(recommendation, i)"
+              [disabled]="isRecommendationLoading(i)">
+              <span *ngIf="!isRecommendationLoading(i) && !isRecommendationExpanded(i)">Expand Recommendation</span>
+              <span *ngIf="!isRecommendationLoading(i) && isRecommendationExpanded(i)">Collapse</span>
+              <span *ngIf="isRecommendationLoading(i)" class="loading-text">Loading...</span>
+            </button>
+          </div>
+
+          <!-- Expanded Content -->
+          <div *ngIf="expandedRecommendations[i] && expandedRecommendations[i]?.data" class="expanded-recommendation">
+            <div class="expanded-section">
+              <h4>Insights</h4>
+              <p>{{ expandedRecommendations[i]!.data.insights }}</p>
+            </div>
+
+            <div class="expanded-section">
+              <h4>Reasoning</h4>
+              <p>{{ expandedRecommendations[i]!.data.reasoning }}</p>
+            </div>
+
+            <div class="expanded-section" *ngIf="expandedRecommendations[i]!.data.availableActions && expandedRecommendations[i]!.data.availableActions.length > 0">
+              <h4>Available Actions</h4>
+              <ul class="actions-list">
+                <li *ngFor="let action of expandedRecommendations[i]!.data.availableActions">{{ action }}</li>
+              </ul>
+            </div>
+
+            <div class="confidence-section">
+              <span class="confidence-label">Confidence:</span>
+              <span class="confidence-value">{{ expandedRecommendations[i]!.data.confidence }}/10</span>
+            </div>
+          </div>
         </li>
       </ul>
     </div>

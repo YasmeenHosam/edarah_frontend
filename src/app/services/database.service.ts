@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface Database {
   id?: string;
@@ -39,7 +40,7 @@ export interface CreateDatabaseResponse {
   providedIn: 'root'
 })
 export class DatabaseService {
-  private baseUrl = 'http://13.38.195.203:3000/api/rag/databases';
+  private baseUrl = `${environment.apiUrl}/api/rag/databases`;
 
   constructor(private http: HttpClient) {}
 
@@ -60,10 +61,24 @@ export class DatabaseService {
 
   // POST /api/rag/databases - Create new database
   createDatabase(database: CreateDatabaseRequest): Observable<CreateDatabaseResponse | Database> {
+    console.log('DatabaseService: Making POST request to:', this.baseUrl);
+    console.log('DatabaseService: Request data:', database);
     return this.http.post<CreateDatabaseResponse | Database>(this.baseUrl, database, {
       headers: this.getHeaders()
     });
   }
 
+  // POST /api/rag/databases/test - Test database connection
+  testConnection(database: CreateDatabaseRequest): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/test`, database, {
+      headers: this.getHeaders()
+    });
+  }
 
+  // DELETE /api/rag/databases/:id - Delete database
+  deleteDatabase(databaseId: string): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/${databaseId}`, {
+      headers: this.getHeaders()
+    });
+  }
 }

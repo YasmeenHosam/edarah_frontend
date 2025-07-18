@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, KeyValuePipe } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AIAssistantService, AnalysisRequest, AnalysisResponse } from '../../services/ai-assistant.service';
+import { Router } from '@angular/router';
+import { AIAssistantService, AnalysisRequest, AnalysisResponse, RecommendationExplainRequest, RecommendationExplainResponse } from '../../services/ai-assistant.service';
 import { DatabaseService, Database } from '../../services/database.service';
 import { SidebarComponent } from '../shared/sidebar/sidebar.component';
 
@@ -21,6 +22,8 @@ export class AIAssistantComponent implements OnInit {
   analysisResult: AnalysisResponse | null = null;
   message = '';
   messageType: 'success' | 'error' | '' = '';
+  expandedRecommendations: { [key: number]: RecommendationExplainResponse | null } = {};
+  loadingRecommendations: { [key: number]: boolean } = {};
 
   // Predefined questions for quick access
   quickQuestions = [
@@ -38,7 +41,8 @@ export class AIAssistantComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private aiAssistantService: AIAssistantService,
-    private databaseService: DatabaseService
+    private databaseService: DatabaseService,
+    private router: Router
   ) {
     this.questionForm = this.fb.group({
       databaseId: ['', Validators.required],
@@ -152,5 +156,46 @@ export class AIAssistantComponent implements OnInit {
       hour: '2-digit',
       minute: '2-digit'
     });
+  }
+
+  goToMarketingPlan() {
+    this.router.navigate(['/dashboard/marketing-plan']);
+  }
+
+  expandRecommendation(recommendation: string, index: number) {
+    // Check if already expanded
+    if (this.expandedRecommendations[index]) {
+      this.expandedRecommendations[index] = null;
+      return;
+    }
+
+    this.loadingRecommendations[index] = true;
+
+    const request: RecommendationExplainRequest = {
+      recommendation: recommendation
+    };
+
+    this.aiAssistantService.explainRecommendation(request).subscribe({
+      next: (response) => {
+        this.expandedRecommendations[index] = response;
+        this.loadingRecommendations[index] = false;
+      },
+      error: (error) => {
+        console.error('Error explaining recommendation:', error);
+        this.showMessage(
+          error.error?.message || 'Error explaining recommendation. Please try again.',
+          'error'
+        );
+        this.loadingRecommendations[index] = false;
+      }
+    });
+  }
+
+  isRecommendationExpanded(index: number): boolean {
+    return !!this.expandedRecommendations[index];
+  }
+
+  isRecommendationLoading(index: number): boolean {
+    return !!this.loadingRecommendations[index];
   }
 }

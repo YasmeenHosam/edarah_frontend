@@ -70,13 +70,15 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
-    
+
     // Set active menu item based on current route
     const currentRoute = this.router.url;
     const activeItem = this.menuItems.find(item => currentRoute.startsWith(item.route));
     if (activeItem) {
       this.activeMenuItem = activeItem.id;
     }
+
+    this.initializeAnimations();
   }
 
   setActiveMenuItem(itemId: string) {
@@ -89,5 +91,20 @@ export class SidebarComponent implements OnInit {
 
   logout() {
     this.authService.logout();
+  }
+
+  private initializeAnimations() {
+    setTimeout(() => {
+      this.animateMenuItems();
+    }, 300);
+  }
+
+  private animateMenuItems() {
+    const menuItems = document.querySelectorAll('.nav-item');
+    menuItems.forEach((item, index) => {
+      setTimeout(() => {
+        item.classList.add('animated');
+      }, index * 100);
+    });
   }
 }

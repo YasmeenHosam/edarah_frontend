@@ -31,6 +31,10 @@ export const routes: Routes = [
     loadComponent: () => import('./components/ai-assistant/ai-assistant.component').then(m => m.AIAssistantComponent)
   },
   {
+    path: 'dashboard/marketing-plan',
+    loadComponent: () => import('./components/marketing-plan/marketing-plan.component').then(m => m.MarketingPlanComponent)
+  },
+  {
     path: 'dashboard/products',
     loadComponent: () => import('./components/products/products.component').then(m => m.ProductsComponent)
   },

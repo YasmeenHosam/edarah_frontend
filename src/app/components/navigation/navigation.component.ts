@@ -18,7 +18,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   private routerSubscription!: Subscription;
   isScrolled = false;
   isMobileMenuOpen = false;
-  isUserMenuOpen = false;
+
   isAuthPage = false;
 
   constructor(private authService: AuthService, private router: Router) {}
@@ -58,16 +58,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
     this.isScrolled = scrollTop > 100; // Change background after scrolling 100px
   }
 
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: Event) {
-    const target = event.target as HTMLElement;
-    const userMenu = target.closest('.user-menu');
 
-    // Close user menu if clicked outside
-    if (!userMenu && this.isUserMenuOpen) {
-      this.isUserMenuOpen = false;
-    }
-  }
 
   logout() {
     this.authService.logout();
@@ -88,11 +79,5 @@ export class NavigationComponent implements OnInit, OnDestroy {
     document.body.style.overflow = 'auto';
   }
 
-  toggleUserMenu() {
-    this.isUserMenuOpen = !this.isUserMenuOpen;
-  }
 
-  closeUserMenu() {
-    this.isUserMenuOpen = false;
-  }
 }
