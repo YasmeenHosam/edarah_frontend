@@ -10,18 +10,18 @@
         </div>
       </div>
       
-      <h2>جاري التحقق من حالة الدفع...</h2>
+      <h2>Checking Payment Status...</h2>
       <p class="status-message">
-        نتحقق من حالة دفعتك لباقة <strong>{{ pendingPlanName }}</strong>
+        We're verifying your payment for the <strong>{{ pendingPlanName }}</strong> plan
       </p>
-      
+
       <div class="progress-info">
         <div class="progress-bar">
           <div class="progress-fill" [style.width.%]="getProgressPercentage()"></div>
         </div>
         <p class="progress-text">
-          محاولة {{ checkAttempts }} من {{ maxAttempts }}
-          ({{ getRemainingTime() }} محاولة متبقية)
+          Attempt {{ checkAttempts }} of {{ maxAttempts }}
+          ({{ getRemainingTime() }} attempts remaining)
         </p>
       </div>
       
@@ -31,13 +31,13 @@
             <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
             <polyline points="12,6 12,12 16,14" stroke="currentColor" stroke-width="2"/>
           </svg>
-          <span>يتم التحقق كل 10 ثواني</span>
+          <span>Checking every 10 seconds</span>
         </div>
         <div class="detail-item">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
             <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          <span>سيتم التحديث تلقائياً عند اكتمال الدفع</span>
+          <span>Will update automatically when payment is complete</span>
         </div>
       </div>
     </div>
@@ -51,19 +51,19 @@
         </svg>
       </div>
       
-      <h2>انتهت مهلة التحقق</h2>
+      <h2>Verification Timeout</h2>
       <p class="timeout-message">
-        لم نتمكن من التحقق من حالة دفعتك تلقائياً.
-        هذا لا يعني أن الدفع فشل.
+        We couldn't automatically verify your payment status.
+        This doesn't mean your payment failed.
       </p>
-      
+
       <div class="timeout-help">
-        <h3>ماذا يمكنك فعله؟</h3>
+        <h3>What can you do?</h3>
         <ul>
-          <li>تحقق من رسائل البريد الإلكتروني للتأكيد</li>
-          <li>راجع كشف حسابك البنكي</li>
-          <li>إذا تم خصم المبلغ، فعّل الباقة يدوياً أدناه</li>
-          <li>تواصل مع الدعم الفني إذا واجهت مشاكل</li>
+          <li>Check your email for confirmation</li>
+          <li>Review your bank statement</li>
+          <li>If the amount was charged, activate the plan manually below</li>
+          <li>Contact support if you encounter any issues</li>
         </ul>
       </div>
       
@@ -72,10 +72,10 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
             <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          تفعيل الباقة يدوياً
+          Activate Plan Manually
         </button>
         <button class="btn btn-outline" (click)="cancelAndGoBack()">
-          العودة للرئيسية
+          Back to Home
         </button>
       </div>
     </div>
@@ -83,10 +83,10 @@
     <!-- Manual Testing Section (Development Only) -->
     <div *ngIf="isChecking" class="testing-section">
       <div class="testing-divider">
-        <span>للاختبار فقط</span>
+        <span>Testing Only</span>
       </div>
       <button class="btn btn-test" (click)="activatePlanManually()">
-        تفعيل الباقة يدوياً (للاختبار)
+        Activate Plan Manually (Testing)
       </button>
     </div>
   </div>

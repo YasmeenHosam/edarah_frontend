@@ -3,8 +3,8 @@
     <!-- Verification Loading State -->
     <div *ngIf="isVerifying" class="verification-loading">
       <div class="loading-spinner"></div>
-      <h2>جاري التحقق من الدفع...</h2>
-      <p>يرجى الانتظار بينما نتحقق من حالة دفعتك</p>
+      <h2>Verifying Payment...</h2>
+      <p>Please wait while we verify your payment status</p>
     </div>
 
     <!-- Success State -->
@@ -16,22 +16,22 @@
         </svg>
       </div>
       
-      <h2>تم الدفع بنجاح! 🎉</h2>
+      <h2>Payment Successful! 🎉</h2>
       <p class="success-message">
-        تهانينا! تم تفعيل باقة <strong>{{ planName }}</strong> بنجاح.
+        Congratulations! Your <strong>{{ planName }}</strong> plan has been activated successfully.
       </p>
-      
+
       <div class="plan-benefits">
-        <h3>يمكنك الآن الاستفادة من:</h3>
+        <h3>You can now enjoy:</h3>
         <ul>
-          <li>جميع مميزات الباقة الجديدة</li>
-          <li>حدود قواعد البيانات المحدثة</li>
-          <li>الوصول للأدوات المتقدمة</li>
+          <li>All new plan features</li>
+          <li>Updated database limits</li>
+          <li>Access to advanced tools</li>
         </ul>
       </div>
-      
+
       <div class="redirect-info">
-        <p>سيتم توجيهك للوحة التحكم خلال {{ redirectCountdown }} ثواني</p>
+        <p>You will be redirected to the dashboard in {{ redirectCountdown }} seconds</p>
         <div class="countdown-bar">
           <div class="countdown-fill" [style.width.%]="(5 - redirectCountdown) * 20"></div>
         </div>
@@ -45,10 +45,10 @@
             <rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
             <rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
           </svg>
-          الذهاب للوحة التحكم
+          Go to Dashboard
         </button>
         <button class="btn btn-outline" (click)="goHome()">
-          العودة للرئيسية
+          Back to Home
         </button>
       </div>
     </div>
@@ -63,24 +63,24 @@
         </svg>
       </div>
       
-      <h2>فشل في التحقق من الدفع</h2>
+      <h2>Payment Verification Failed</h2>
       <p class="error-message">{{ verificationError }}</p>
-      
+
       <div class="error-help">
-        <h3>ماذا يمكنك فعله؟</h3>
+        <h3>What can you do?</h3>
         <ul>
-          <li>تحقق من رسائل البريد الإلكتروني للتأكيد</li>
-          <li>راجع كشف حسابك البنكي</li>
-          <li>تواصل مع الدعم الفني إذا تم خصم المبلغ</li>
+          <li>Check your email for confirmation</li>
+          <li>Review your bank statement</li>
+          <li>Contact support if the amount was charged</li>
         </ul>
       </div>
-      
+
       <div class="action-buttons">
         <button class="btn btn-primary" (click)="goHome()">
-          العودة للرئيسية
+          Back to Home
         </button>
         <button class="btn btn-outline" onclick="window.location.reload()">
-          إعادة المحاولة
+          Try Again
         </button>
       </div>
     </div>
