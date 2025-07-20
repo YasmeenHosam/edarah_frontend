@@ -1,0 +1,174 @@
+<p-dialog 
+  [(visible)]="visible" 
+  [modal]="true" 
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  styleClass="analysis-modal"
+  [style]="{width: '95vw', maxWidth: '1200px', height: '90vh'}"
+  (onHide)="onHide()">
+  
+  <ng-template pTemplate="header">
+    <div class="modal-header">
+      <div class="header-content">
+        <i class="pi pi-chart-line header-icon"></i>
+        <div class="header-text">
+          <h2>Product Analysis</h2>
+          <p class="product-name">{{ productName }}</p>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <p-progressSpinner styleClass="w-4rem h-4rem"></p-progressSpinner>
+    <p class="loading-text">Analyzing product data...</p>
+    <small class="loading-subtitle">This may take a few moments</small>
+  </div>
+
+  <!-- Analysis Results -->
+  <div *ngIf="!isLoading && analysisData && analysisData.success" class="analysis-content">
+    
+    <!-- Sales Chart Section -->
+    <div class="analysis-section">
+      <div class="section-header">
+        <i class="pi pi-chart-line"></i>
+        <h3>Sales Performance</h3>
+      </div>
+      <p-card styleClass="chart-card">
+        <div class="chart-container">
+          <p-chart
+            type="line"
+            [data]="salesChartData"
+            [options]="salesChartOptions"
+            height="300px">
+          </p-chart>
+        </div>
+      </p-card>
+    </div>
+
+    <!-- Key Metrics Row -->
+    <div class="metrics-row">
+      <!-- Expected Sales -->
+      <p-card styleClass="metric-card">
+        <div class="metric-content">
+          <div class="metric-header">
+            <i class="pi pi-trending-up metric-icon"></i>
+            <h4>Expected Sales</h4>
+          </div>
+          <div class="metric-details">
+            <div class="metric-item">
+              <span class="metric-label">Revenue:</span>
+              <span class="metric-value">{{ formatCurrency(analysisData.data.expectedSales.total_expected_revenue) }}</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">Growth Rate:</span>
+              <p-tag [value]="analysisData.data.expectedSales.expected_rate" severity="success"></p-tag>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">Units:</span>
+              <span class="metric-value">{{ analysisData.data.expectedSales.expected_units_sold }}</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">Peak Time:</span>
+              <span class="metric-value">{{ analysisData.data.expectedSales.most_likely_sales_time }}</span>
+            </div>
+          </div>
+        </div>
+      </p-card>
+
+      <!-- Warning Section -->
+      <p-card styleClass="warning-card" *ngIf="analysisData.data.warning">
+        <div class="warning-content">
+          <div class="warning-header">
+            <i [class]="getWarningIcon(analysisData.data.warning.type)"></i>
+            <h4>{{ analysisData.data.warning.type }}</h4>
+          </div>
+          <p class="warning-notice">{{ analysisData.data.warning.short_notice }}</p>
+          <div class="warning-suggestion">
+            <strong>Suggestion:</strong>
+            <p>{{ analysisData.data.warning.suggestion }}</p>
+          </div>
+        </div>
+      </p-card>
+    </div>
+
+    <!-- Price History -->
+    <div class="analysis-section" *ngIf="analysisData.data.prices && analysisData.data.prices.length > 0">
+      <div class="section-header">
+        <i class="pi pi-dollar"></i>
+        <h3>Price History & Suggestions</h3>
+      </div>
+
+      <div class="prices-grid">
+        <p-card *ngFor="let price of analysisData.data.prices" styleClass="price-card">
+          <div class="price-content">
+            <div class="price-header">
+              <span class="current-price">{{ formatCurrency(getCurrentPrice(price)) }}</span>
+              <span class="price-date">{{ formatDate(price.date) }}</span>
+            </div>
+            <p-divider></p-divider>
+            <div class="price-suggestion">
+              <span class="suggestion-label">Suggested Price:</span>
+              <span class="suggested-price" *ngIf="getSuggestedPrice(price)">{{ formatCurrency(getSuggestedPrice(price)!) }}</span>
+              <span class="suggested-price" *ngIf="!getSuggestedPrice(price)">N/A</span>
+              <p-tag
+                *ngIf="getSuggestedPrice(price)"
+                [value]="((getSuggestedPrice(price)! - getCurrentPrice(price)) / getCurrentPrice(price) * 100).toFixed(1) + '%'"
+                [severity]="getSuggestedPrice(price)! > getCurrentPrice(price) ? 'success' : 'danger'">
+              </p-tag>
+            </div>
+          </div>
+        </p-card>
+      </div>
+    </div>
+
+    <!-- Smart Suggestions -->
+    <div class="analysis-section" *ngIf="analysisData.data.smartSuggestions && analysisData.data.smartSuggestions.length > 0">
+      <div class="section-header">
+        <i class="pi pi-lightbulb"></i>
+        <h3>Smart Suggestions</h3>
+      </div>
+      <div class="suggestions-grid">
+        <p-card *ngFor="let suggestion of analysisData.data.smartSuggestions" styleClass="suggestion-card">
+          <div class="suggestion-content">
+            <h4 class="suggestion-title">{{ suggestion.title }}</h4>
+            <p class="suggestion-description">{{ suggestion.description }}</p>
+            <div class="benefits-section">
+              <h5>Benefits:</h5>
+              <ul class="benefits-list">
+                <li *ngFor="let benefit of suggestion.benefits">
+                  <i class="pi pi-check-circle"></i>
+                  {{ benefit }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </p-card>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="!isLoading && (!analysisData || !analysisData.success)" class="error-container">
+    <div class="error-content">
+      <i class="pi pi-exclamation-triangle error-icon"></i>
+      <h3>Analysis Failed</h3>
+      <p>Unable to analyze the product. Please try again later.</p>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="modal-footer">
+      <p-button 
+        label="Close" 
+        icon="pi pi-times" 
+        styleClass="p-button-secondary"
+        (onClick)="onHide()">
+      </p-button>
+    </div>
+  </ng-template>
+
+</p-dialog>

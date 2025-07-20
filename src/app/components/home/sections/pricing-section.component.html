@@ -57,10 +57,22 @@
           <button
             class="plan-button"
             [class]="plan.buttonClass"
+            [disabled]="isProcessingPayment"
             (click)="onSelectPlan(plan)"
           >
-            {{ plan.buttonText }}
+            @if (isProcessingPayment) {
+              <span class="loading-spinner"></span>
+              جاري المعالجة...
+            } @else {
+              {{ plan.buttonText }}
+            }
           </button>
+
+          @if (paymentError) {
+            <div class="payment-error">
+              {{ paymentError }}
+            </div>
+          }
         </div>
       }
     </div>

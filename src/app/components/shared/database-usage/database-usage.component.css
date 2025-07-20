@@ -1,0 +1,274 @@
+.database-usage-container {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.usage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.usage-title h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.usage-status {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.usage-count {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  font-weight: 600;
+}
+
+.usage-count .current {
+  font-size: 1.5rem;
+  color: #111827;
+}
+
+.usage-count .separator {
+  font-size: 1.25rem;
+  color: #6b7280;
+}
+
+.usage-count .max {
+  font-size: 1.125rem;
+  color: #6b7280;
+}
+
+.progress-container {
+  margin-bottom: 1rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #f3f4f6;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progress-fill {
+  height: 100%;
+  transition: width 0.3s ease, background-color 0.3s ease;
+  border-radius: 4px;
+}
+
+.progress-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+  text-align: right;
+}
+
+.usage-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detail-item .label {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.detail-item .value {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #111827;
+}
+
+.warning-message {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.warning-message.warning {
+  background: #fef3c7;
+  border: 1px solid #fbbf24;
+  color: #92400e;
+}
+
+.warning-message.error {
+  background: #fee2e2;
+  border: 1px solid #f87171;
+  color: #dc2626;
+}
+
+.warning-icon {
+  flex-shrink: 0;
+}
+
+.upgrade-section {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 1px solid #0ea5e9;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.upgrade-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.upgrade-text h4 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0c4a6e;
+}
+
+.upgrade-text p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #0369a1;
+}
+
+.upgrade-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #0ea5e9;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.upgrade-button:hover {
+  background: #0284c7;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(14, 165, 233, 0.3);
+}
+
+.upgrade-button:active {
+  transform: translateY(0);
+}
+
+.disabled-message {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: #f9fafb;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.disabled-icon {
+  flex-shrink: 0;
+  color: #9ca3af;
+}
+
+.usage-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 2rem;
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.loading-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #f3f4f6;
+  border-top: 2px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .database-usage-container {
+    padding: 1rem;
+  }
+  
+  .usage-header {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+  
+  .upgrade-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  
+  .upgrade-button {
+    align-self: stretch;
+    justify-content: center;
+  }
+  
+  .usage-count .current {
+    font-size: 1.25rem;
+  }
+  
+  .usage-count .max {
+    font-size: 1rem;
+  }
+}
+
+/* Compact Mode */
+.compact .database-usage-container {
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.compact .usage-header {
+  margin-bottom: 0.75rem;
+}
+
+.compact .usage-details {
+  margin-bottom: 0.75rem;
+}
+
+.compact .upgrade-section {
+  padding: 0.75rem;
+}
+
+.compact .warning-message {
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.75rem;
+}

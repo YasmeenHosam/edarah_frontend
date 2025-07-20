@@ -4,6 +4,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
+import { PlanService } from './plan.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,11 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<any | null>;
   public currentUser$: Observable<any | null>;
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private planService: PlanService
+  ) {
     const user = localStorage.getItem('currentUser');
     this.currentUserSubject = new BehaviorSubject<any | null>(user ? JSON.parse(user) : null);
     this.currentUser$ = this.currentUserSubject.asObservable();
@@ -52,6 +57,10 @@ export class AuthService {
     localStorage.removeItem('currentUser');
     localStorage.removeItem('token');
     this.currentUserSubject.next(null);
+
+    // Clear plan data on logout
+    this.planService.clearPlanData();
+
     this.router.navigate(['/auth']);
   }
 

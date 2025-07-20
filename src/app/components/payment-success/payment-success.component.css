@@ -1,0 +1,295 @@
+.payment-success-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  padding: 2rem;
+}
+
+.payment-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  padding: 3rem;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Loading State */
+.verification-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #f3f4f6;
+  border-top: 4px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.verification-loading h2 {
+  margin: 0;
+  color: #111827;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.verification-loading p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+/* Success State */
+.verification-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.success-icon {
+  margin-bottom: 1rem;
+}
+
+.verification-success h2 {
+  margin: 0;
+  color: #10b981;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.success-message {
+  color: #374151;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.plan-benefits {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 100%;
+  text-align: right;
+}
+
+.plan-benefits h3 {
+  margin: 0 0 1rem 0;
+  color: #065f46;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.plan-benefits ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.plan-benefits li {
+  padding: 0.5rem 0;
+  color: #047857;
+  position: relative;
+  padding-right: 1.5rem;
+}
+
+.plan-benefits li::before {
+  content: '✓';
+  position: absolute;
+  right: 0;
+  color: #10b981;
+  font-weight: bold;
+}
+
+.redirect-info {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  padding: 1rem;
+  width: 100%;
+}
+
+.redirect-info p {
+  margin: 0 0 0.75rem 0;
+  color: #1e40af;
+  font-size: 0.875rem;
+}
+
+.countdown-bar {
+  width: 100%;
+  height: 4px;
+  background: #dbeafe;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.countdown-fill {
+  height: 100%;
+  background: #3b82f6;
+  transition: width 1s linear;
+}
+
+/* Error State */
+.verification-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.error-icon {
+  margin-bottom: 1rem;
+}
+
+.verification-error h2 {
+  margin: 0;
+  color: #ef4444;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.error-message {
+  color: #dc2626;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.error-help {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 100%;
+  text-align: right;
+}
+
+.error-help h3 {
+  margin: 0 0 1rem 0;
+  color: #991b1b;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.error-help ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.error-help li {
+  padding: 0.5rem 0;
+  color: #dc2626;
+  position: relative;
+  padding-right: 1.5rem;
+}
+
+.error-help li::before {
+  content: '•';
+  position: absolute;
+  right: 0;
+  color: #ef4444;
+  font-weight: bold;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.btn {
+  flex: 1;
+  padding: 0.875rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-primary {
+  background: #3b82f6;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid #d1d5db;
+  color: #6b7280;
+}
+
+.btn-outline:hover {
+  border-color: #9ca3af;
+  color: #374151;
+  transform: translateY(-1px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .payment-success-container {
+    padding: 1rem;
+  }
+  
+  .payment-card {
+    padding: 2rem;
+  }
+  
+  .verification-success h2,
+  .verification-error h2 {
+    font-size: 1.5rem;
+  }
+  
+  .success-message,
+  .error-message {
+    font-size: 1rem;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+  }
+  
+  .plan-benefits,
+  .error-help {
+    text-align: center;
+  }
+  
+  .plan-benefits li,
+  .error-help li {
+    padding-right: 0;
+    padding-left: 1.5rem;
+  }
+  
+  .plan-benefits li::before,
+  .error-help li::before {
+    right: auto;
+    left: 0;
+  }
+}

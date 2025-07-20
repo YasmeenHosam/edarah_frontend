@@ -1,0 +1,88 @@
+<div class="payment-success-container">
+  <div class="payment-card">
+    <!-- Verification Loading State -->
+    <div *ngIf="isVerifying" class="verification-loading">
+      <div class="loading-spinner"></div>
+      <h2>جاري التحقق من الدفع...</h2>
+      <p>يرجى الانتظار بينما نتحقق من حالة دفعتك</p>
+    </div>
+
+    <!-- Success State -->
+    <div *ngIf="!isVerifying && verificationSuccess" class="verification-success">
+      <div class="success-icon">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="10" stroke="#10b981" stroke-width="2" fill="#f0fdf4"/>
+          <path d="M9 12l2 2 4-4" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      
+      <h2>تم الدفع بنجاح! 🎉</h2>
+      <p class="success-message">
+        تهانينا! تم تفعيل باقة <strong>{{ planName }}</strong> بنجاح.
+      </p>
+      
+      <div class="plan-benefits">
+        <h3>يمكنك الآن الاستفادة من:</h3>
+        <ul>
+          <li>جميع مميزات الباقة الجديدة</li>
+          <li>حدود قواعد البيانات المحدثة</li>
+          <li>الوصول للأدوات المتقدمة</li>
+        </ul>
+      </div>
+      
+      <div class="redirect-info">
+        <p>سيتم توجيهك للوحة التحكم خلال {{ redirectCountdown }} ثواني</p>
+        <div class="countdown-bar">
+          <div class="countdown-fill" [style.width.%]="(5 - redirectCountdown) * 20"></div>
+        </div>
+      </div>
+      
+      <div class="action-buttons">
+        <button class="btn btn-primary" (click)="redirectToDashboard()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+            <rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+            <rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+            <rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          الذهاب للوحة التحكم
+        </button>
+        <button class="btn btn-outline" (click)="goHome()">
+          العودة للرئيسية
+        </button>
+      </div>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="!isVerifying && !verificationSuccess" class="verification-error">
+      <div class="error-icon">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="10" stroke="#ef4444" stroke-width="2" fill="#fef2f2"/>
+          <line x1="15" y1="9" x2="9" y2="15" stroke="#ef4444" stroke-width="2"/>
+          <line x1="9" y1="9" x2="15" y2="15" stroke="#ef4444" stroke-width="2"/>
+        </svg>
+      </div>
+      
+      <h2>فشل في التحقق من الدفع</h2>
+      <p class="error-message">{{ verificationError }}</p>
+      
+      <div class="error-help">
+        <h3>ماذا يمكنك فعله؟</h3>
+        <ul>
+          <li>تحقق من رسائل البريد الإلكتروني للتأكيد</li>
+          <li>راجع كشف حسابك البنكي</li>
+          <li>تواصل مع الدعم الفني إذا تم خصم المبلغ</li>
+        </ul>
+      </div>
+      
+      <div class="action-buttons">
+        <button class="btn btn-primary" (click)="goHome()">
+          العودة للرئيسية
+        </button>
+        <button class="btn btn-outline" onclick="window.location.reload()">
+          إعادة المحاولة
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

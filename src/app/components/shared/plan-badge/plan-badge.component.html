@@ -1,0 +1,64 @@
+<div class="plan-badge-container" *ngIf="currentPlan">
+  <div class="plan-badge" [style.background]="currentPlan.badgeColor">
+    <!-- Plan Icon -->
+    <div class="plan-icon">
+      <ng-container [ngSwitch]="getPlanIcon()">
+        <!-- Free Plan Icon -->
+        <svg *ngSwitchCase="'free'" width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z" 
+                stroke="currentColor" stroke-width="2" fill="none"/>
+          <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        
+        <!-- Pro Plan Icon -->
+        <svg *ngSwitchCase="'pro'" width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" 
+                   stroke="currentColor" stroke-width="2" fill="currentColor"/>
+        </svg>
+        
+        <!-- Business Plan Icon -->
+        <svg *ngSwitchCase="'business'" width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" 
+                stroke="currentColor" stroke-width="2" fill="none"/>
+          <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="2"/>
+          <path d="M16 10a4 4 0 0 1-8 0" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </ng-container>
+    </div>
+
+    <!-- Plan Info -->
+    <div class="plan-info">
+      <div class="plan-name">{{ currentPlan.displayName }}</div>
+      <div class="plan-price" *ngIf="currentPlan.price > 0">
+        ${{ currentPlan.price }}/month
+      </div>
+      <div class="plan-price" *ngIf="currentPlan.price === 0">
+        Free
+      </div>
+    </div>
+
+    <!-- Upgrade Button (only for non-Business plans) -->
+    <button 
+      *ngIf="isUpgradeable()" 
+      class="upgrade-btn"
+      (click)="onUpgradeClick()"
+      title="Upgrade Plan">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+        <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Plan Features Tooltip (optional) -->
+  <div class="plan-tooltip" *ngIf="currentPlan">
+    <div class="tooltip-header">
+      <strong>{{ currentPlan.displayName }} Features:</strong>
+    </div>
+    <ul class="feature-list">
+      <li *ngFor="let feature of currentPlan.features">{{ feature }}</li>
+    </ul>
+    <div class="tooltip-footer" *ngIf="isUpgradeable()">
+      <small>Click upgrade to see higher plans</small>
+    </div>
+  </div>
+</div>

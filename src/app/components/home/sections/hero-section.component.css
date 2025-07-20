@@ -63,7 +63,7 @@
 
 .title-line-1 {
   display: inline-block;
-  white-space: nowrap;
+  /* Removed white-space: nowrap to allow text wrapping on small screens */
 }
 
 .title-line-2 {
@@ -225,7 +225,7 @@
   opacity: 0;
   animation: fadeInLabel 0.5s ease-out forwards;
   font-weight: 700;
-  white-space: nowrap;
+  /* Removed white-space: nowrap to allow text wrapping on small screens */
   text-shadow:
     0 2px 4px rgba(0, 0, 0, 0.8),
     0 4px 8px rgba(0, 0, 0, 0.6),
@@ -425,22 +425,22 @@
   .zigzag-animation {
     max-width: 1200px;
     max-height: 600px;
-    padding: 30px 10px;
+    padding: clamp(1.5rem, 3vw, 1.875rem) clamp(0.5rem, 1vw, 0.625rem);
   }
 
   .hero-visual {
-    min-height: 500px;
-    padding: 30px 10px;
+    min-height: clamp(25rem, 50vh, 31.25rem);
+    padding: clamp(1.5rem, 3vw, 1.875rem) clamp(0.5rem, 1vw, 0.625rem);
   }
 
   .pulse-icon {
-    width: 120px;
-    height: 120px;
+    width: clamp(6rem, 12vw, 7.5rem);
+    height: clamp(6rem, 12vw, 7.5rem);
   }
 
   .pulse-icon img {
-    width: 70px;
-    height: 70px;
+    width: clamp(3.5rem, 7vw, 4.375rem);
+    height: clamp(3.5rem, 7vw, 4.375rem);
   }
 
   .label {
@@ -483,22 +483,22 @@
   .zigzag-animation {
     max-width: 1000px;
     max-height: 500px;
-    padding: 25px 8px;
+    padding: clamp(1.25rem, 2.5vw, 1.5625rem) clamp(0.375rem, 0.8vw, 0.5rem);
   }
 
   .hero-visual {
-    min-height: 450px;
-    padding: 25px 8px;
+    min-height: clamp(22rem, 45vh, 28.125rem);
+    padding: clamp(1.25rem, 2.5vw, 1.5625rem) clamp(0.375rem, 0.8vw, 0.5rem);
   }
 
   .pulse-icon {
-    width: 100px;
-    height: 100px;
+    width: clamp(5rem, 10vw, 6.25rem);
+    height: clamp(5rem, 10vw, 6.25rem);
   }
 
   .pulse-icon img {
-    width: 60px;
-    height: 60px;
+    width: clamp(3rem, 6vw, 3.75rem);
+    height: clamp(3rem, 6vw, 3.75rem);
   }
 
   .label {
@@ -595,8 +595,8 @@
   }
 
   .label {
-    font-size: 18px;
-    margin-bottom: 4px;
+    font-size: clamp(1rem, 2.5vw, 1.125rem);
+    margin-bottom: clamp(0.25rem, 0.5vw, 0.375rem);
   }
 
   /* Simplify animations for very small screens */
@@ -615,5 +615,123 @@
     50% {
       transform: scale(1.02);
     }
+  }
+}
+
+/* Ultra-small screens (320px and below) */
+@media (max-width: 320px) {
+  .hero-container {
+    padding: 0 clamp(0.5rem, 2vw, 0.75rem);
+  }
+
+  .hero-content {
+    gap: clamp(1rem, 3vw, 1.5rem);
+  }
+
+  .hero-title {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+    word-break: break-word;
+    hyphens: auto;
+  }
+
+  .title-line-1,
+  .title-line-2 {
+    word-break: break-word;
+    hyphens: auto;
+  }
+
+  .hero-description {
+    font-size: clamp(0.8rem, 3vw, 0.9rem);
+    word-break: break-word;
+    hyphens: auto;
+  }
+
+  .hero-actions {
+    gap: clamp(0.5rem, 1.5vw, 0.75rem);
+    margin-bottom: clamp(0.5rem, 1vh, 0.75rem);
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+    max-width: clamp(8rem, 70vw, 12rem);
+    padding: clamp(0.625rem, 3vw, 0.75rem) clamp(1rem, 4vw, 1.25rem);
+    font-size: clamp(0.8rem, 3vw, 0.875rem);
+  }
+
+  .zigzag-animation {
+    max-width: 600px;
+    max-height: 350px;
+    padding: 15px 3px;
+  }
+
+  .hero-visual {
+    min-height: 300px;
+    padding: 15px 3px;
+  }
+
+  .pulse-icon {
+    width: clamp(60px, 15vw, 80px);
+    height: clamp(60px, 15vw, 80px);
+  }
+
+  .pulse-icon img {
+    width: clamp(35px, 8vw, 45px);
+    height: clamp(35px, 8vw, 45px);
+  }
+
+  .label {
+    font-size: clamp(14px, 4vw, 16px);
+    word-break: break-word;
+    hyphens: auto;
+  }
+}
+
+/* Extra ultra-small screens (280px and below) */
+@media (max-width: 280px) {
+  .hero-container {
+    padding: 0 clamp(0.375rem, 1.5vw, 0.5rem);
+  }
+
+  .hero {
+    padding: clamp(2.5rem, 5vh, 3.5rem) 0 clamp(0.75rem, 1.5vh, 1rem);
+  }
+
+  .hero-title {
+    font-size: clamp(1.25rem, 7vw, 1.75rem);
+  }
+
+  .hero-description {
+    font-size: clamp(0.75rem, 3.5vw, 0.85rem);
+  }
+
+  .hero-actions .btn {
+    max-width: clamp(7rem, 80vw, 10rem);
+    padding: clamp(0.5rem, 4vw, 0.625rem) clamp(0.875rem, 5vw, 1rem);
+    font-size: clamp(0.75rem, 4vw, 0.8rem);
+  }
+
+  .zigzag-animation {
+    max-width: 500px;
+    max-height: 300px;
+    padding: 10px 2px;
+  }
+
+  .hero-visual {
+    min-height: 250px;
+    padding: 10px 2px;
+  }
+
+  .pulse-icon {
+    width: clamp(50px, 18vw, 70px);
+    height: clamp(50px, 18vw, 70px);
+  }
+
+  .pulse-icon img {
+    width: clamp(30px, 10vw, 40px);
+    height: clamp(30px, 10vw, 40px);
+  }
+
+  .label {
+    font-size: clamp(12px, 5vw, 14px);
   }
 }

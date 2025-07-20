@@ -160,9 +160,21 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   }
 
   onSelectPlan(plan: any) {
-    console.log('Selected plan:', plan.name);
-    // Navigate to auth page or handle plan selection
-    this.router.navigate(['/auth']);
+    console.log('🏠 Home: Plan selected:', plan);
+
+    // For free plan, navigate to dashboard if authenticated, otherwise to auth
+    if (plan.id === 2) {
+      // Check if user is authenticated
+      const token = localStorage.getItem('token');
+      if (token) {
+        console.log('🏠 Free plan - user authenticated, going to dashboard');
+        this.router.navigate(['/dashboard']);
+      } else {
+        console.log('🏠 Free plan - user not authenticated, going to auth');
+        this.router.navigate(['/auth']);
+      }
+    }
+    // For paid plans, the pricing component handles the payment flow
   }
 
   onSubmitContact(contactData: any) {

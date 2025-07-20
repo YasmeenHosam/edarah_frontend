@@ -36,6 +36,39 @@ export interface DashboardStatsResponse {
   message?: string;
 }
 
+export interface ProductAnalysisResponse {
+  success: boolean;
+  data: {
+    salesChart: {
+      months: string[];
+      sales: number[];
+      profit_loss: number[];
+    };
+    prices: Array<{
+      price: number | string;
+      date: string;
+      suggested_price?: number;
+      suggestedPrice?: number | string;
+    }>;
+    expectedSales: {
+      total_expected_revenue: number;
+      expected_rate: string;
+      most_likely_sales_time: string;
+      expected_units_sold: number;
+    };
+    warning: {
+      type: string;
+      short_notice: string;
+      suggestion: string;
+    };
+    smartSuggestions: Array<{
+      title: string;
+      description: string;
+      benefits: string[];
+    }>;
+  };
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -118,11 +151,11 @@ export class DashboardService {
 
   /**
    * Analyze specific product
-   * @param productId - Product ID to analyze
+   * @param productName - Product name to analyze
    */
-  analyzeProduct(productId: string): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/analyze-product`, 
-      { productId }, 
+  analyzeProduct(productName: string): Observable<ProductAnalysisResponse> {
+    return this.http.post<ProductAnalysisResponse>(`${this.baseUrl}/product-analysis`,
+      { productName },
       { headers: this.getHeaders() }
     );
   }

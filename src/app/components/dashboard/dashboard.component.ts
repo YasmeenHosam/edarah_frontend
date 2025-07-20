@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { SidebarComponent } from '../shared/sidebar/sidebar.component';
+import { PlanBadgeComponent } from '../shared/plan-badge/plan-badge.component';
 
 // PrimeNG Imports
 import { CardModule } from 'primeng/card';
@@ -28,6 +29,7 @@ import { SkeletonModule } from 'primeng/skeleton';
     CommonModule,
     RouterModule,
     SidebarComponent,
+    PlanBadgeComponent,
     CardModule,
     ChartModule,
     ButtonModule,

@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { NavigationComponent } from './components/navigation/navigation.component';
+import { NotificationsComponent } from './components/shared/notifications/notifications.component';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -8,7 +9,7 @@ import { filter } from 'rxjs/operators';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavigationComponent, CommonModule],
+  imports: [RouterOutlet, NavigationComponent, NotificationsComponent, CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

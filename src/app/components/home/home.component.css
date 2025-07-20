@@ -131,8 +131,8 @@ html, body {
 }
 
 .contact-icon {
-  width: 16px;
-  height: 16px;
+  width: clamp(0.875rem, 2vw, 1rem);
+  height: clamp(0.875rem, 2vw, 1rem);
   stroke-width: 2;
   flex-shrink: 0;
 }
@@ -141,13 +141,13 @@ html, body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 30px;
+  padding-top: clamp(1.5rem, 3vw, 1.875rem);
   border-top: 1px solid #334155;
 }
 
 .social-links {
   display: flex;
-  gap: 12px;
+  gap: clamp(0.75rem, 1.5vw, 0.875rem);
 }
 
 .social-link {
@@ -281,57 +281,57 @@ html, body {
 
 @media (max-width: 480px) {
   .footer {
-    padding: 40px 0 20px;
+    padding: clamp(2rem, 4vh, 2.5rem) 0 clamp(1rem, 2vh, 1.25rem);
   }
 
   .footer-content {
-    gap: 30px;
+    gap: clamp(1.5rem, 4vw, 1.875rem);
   }
 
   .footer-brand {
     flex-direction: column;
-    gap: 12px;
+    gap: clamp(0.75rem, 1.5vw, 0.875rem);
   }
 
   .footer-logo {
-    width: 100px;
+    width: clamp(5rem, 12vw, 6.25rem);
   }
 
   .brand-text {
-    font-size: 1.25rem;
+    font-size: clamp(1.125rem, 3vw, 1.25rem);
   }
 
   .footer-links {
-    gap: 25px;
+    gap: clamp(1.25rem, 3vw, 1.5625rem);
   }
 
   .link-group-title {
-    font-size: 14px;
+    font-size: clamp(0.8rem, 2.5vw, 0.875rem);
   }
 
   .group-icon {
-    width: 16px;
-    height: 16px;
+    width: clamp(0.875rem, 2vw, 1rem);
+    height: clamp(0.875rem, 2vw, 1rem);
   }
 
   .contact-item,
   .feature-link,
   .company-link,
   .audience-link {
-    font-size: 13px;
+    font-size: clamp(0.75rem, 2vw, 0.8125rem);
   }
 
   .social-link {
-    width: 36px;
-    height: 36px;
+    width: clamp(2rem, 5vw, 2.25rem);
+    height: clamp(2rem, 5vw, 2.25rem);
   }
 
   .social-link svg {
-    width: 18px;
-    height: 18px;
+    width: clamp(1rem, 2.5vw, 1.125rem);
+    height: clamp(1rem, 2.5vw, 1.125rem);
   }
 
   .copyright {
-    font-size: 12px;
+    font-size: clamp(0.7rem, 2vw, 0.75rem);
   }
 }

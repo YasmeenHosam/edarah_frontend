@@ -3,6 +3,12 @@
 
   <main class="main-content">
     <div class="database-management">
+      <!-- Database Usage Component -->
+      <app-database-usage
+        [currentDatabaseCount]="databases.length"
+        (upgradeRequested)="onUpgradeRequested()">
+      </app-database-usage>
+
       <!-- Page Header -->
       <header class="page-header">
         <div class="header-content">
@@ -20,11 +26,18 @@
             </svg>
             {{ isLoading ? 'Loading...' : 'Refresh' }}
           </button>
-          <button class="btn btn-primary" (click)="toggleAddForm()">
+          <button
+            class="btn btn-primary"
+            (click)="toggleAddForm()"
+            [disabled]="!canAddNewDatabase()"
+            [title]="!canAddDatabase ? 'Database limit reached for your current plan' : ''">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
               <path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="2"/>
             </svg>
             {{ showAddForm ? 'Cancel' : 'Add Database' }}
+            <span *ngIf="!canAddDatabase" class="limit-indicator">
+              ({{ databases.length }}/{{ planLimits?.maxDatabases }})
+            </span>
           </button>
         </div>
       </header>
@@ -93,15 +106,76 @@
               </small>
             </div>
 
-            <!-- Connection String Display -->
-            <div class="form-group full-width" *ngIf="selectedDbType">
-              <label>Connection String</label>
-              <div class="connection-preview" [ngClass]="{'fixed': selectedDbType === 'mysql'}">
-                <code>{{ getConnectionStringForType() }}</code>
+            <!-- Database Connection Details -->
+            <div class="connection-details" *ngIf="selectedDbType">
+              <h3>Connection Details</h3>
+
+              <div class="connection-fields">
+                <!-- Host -->
+                <div class="form-group">
+                  <label for="dbHost">Host</label>
+                  <input
+                    type="text"
+                    id="dbHost"
+                    name="dbHost"
+                    class="form-control"
+                    [(ngModel)]="dbForm.host"
+                    placeholder="localhost"
+                    required>
+                  <small class="form-hint">Database server hostname or IP address</small>
+                </div>
+
+                <!-- Port -->
+                <div class="form-group">
+                  <label for="dbPort">Port</label>
+                  <input
+                    type="number"
+                    id="dbPort"
+                    name="dbPort"
+                    class="form-control"
+                    [(ngModel)]="dbForm.port"
+                    placeholder="3306"
+                    required>
+                  <small class="form-hint">Database server port number</small>
+                </div>
+
+                <!-- Username -->
+                <div class="form-group">
+                  <label for="dbUsername">Username</label>
+                  <input
+                    type="text"
+                    id="dbUsername"
+                    name="dbUsername"
+                    class="form-control"
+                    [(ngModel)]="dbForm.username"
+                    placeholder="root"
+                    required>
+                  <small class="form-hint">Database username</small>
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                  <label for="dbPassword">Password</label>
+                  <input
+                    type="password"
+                    id="dbPassword"
+                    name="dbPassword"
+                    class="form-control"
+                    [(ngModel)]="dbForm.password"
+                    placeholder="Enter password"
+                    required>
+                  <small class="form-hint">Database password</small>
+                </div>
               </div>
-              <small class="form-hint">
-                {{ getConnectionStringHint() }}
-              </small>
+
+              <div class="connection-note">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 16v-4"/>
+                  <path d="M12 8h.01"/>
+                </svg>
+                <span>These connection details are for display purposes. Only the database name will be used for the actual connection.</span>
+              </div>
             </div>
 
             <div class="form-actions">
@@ -157,7 +231,10 @@
           <h3>No databases found</h3>
           <p>Create your first database connection to get started</p>
           <div class="empty-state-actions">
-            <button class="btn btn-primary" (click)="toggleAddForm()">
+            <button
+              class="btn btn-primary"
+              (click)="toggleAddForm()"
+              [disabled]="!canAddNewDatabase()">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                 <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
               </svg>

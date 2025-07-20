@@ -10,15 +10,20 @@
         <p class="header-subtitle">Here's what's happening with your business today</p>
       </div>
       <div class="header-actions">
-        <p-button 
-          icon="pi pi-refresh" 
-          label="Refresh" 
+        <!-- Plan Badge -->
+        <div class="header-plan-badge">
+          <app-plan-badge></app-plan-badge>
+        </div>
+
+        <p-button
+          icon="pi pi-refresh"
+          label="Refresh"
           styleClass="p-button-outlined"
           (onClick)="refreshData()">
         </p-button>
-        <p-avatar 
-          image="/assets/images/white_logo.png" 
-          size="large" 
+        <p-avatar
+          image="/assets/images/white_logo.png"
+          size="large"
           shape="circle">
         </p-avatar>
       </div>

@@ -129,6 +129,26 @@
   box-shadow: 0 2px 8px rgba(26, 109, 192, 0.3);
 }
 
+/* Plan Limit Indicator */
+.limit-indicator {
+  font-size: 0.75rem;
+  opacity: 0.8;
+  margin-left: 0.5rem;
+  font-weight: 500;
+}
+
+/* Disabled button styles for plan limits */
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.btn:disabled:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
 /* Database Grid */
 .databases-grid {
   display: grid;
@@ -667,6 +687,76 @@
 
 .form-group.full-width {
   grid-column: 1 / -1;
+}
+
+/* Connection Details Section */
+.connection-details {
+  grid-column: 1 / -1;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+
+.connection-details h3 {
+  margin: 0 0 1rem 0;
+  color: #1e293b;
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.connection-details h3::before {
+  content: '🔗';
+  font-size: 1.125rem;
+}
+
+.connection-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.connection-details .form-group {
+  margin-bottom: 0;
+}
+
+.connection-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  color: #475569;
+  line-height: 1.4;
+}
+
+.connection-note svg {
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+  color: #64748b;
+}
+
+/* Responsive design for connection details */
+@media (max-width: 768px) {
+  .connection-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .connection-details {
+    padding: 1rem;
+  }
+
+  .connection-note {
+    font-size: 0.75rem;
+  }
 }
 
 .form-group label {

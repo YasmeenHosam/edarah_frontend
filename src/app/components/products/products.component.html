@@ -283,4 +283,14 @@
 
     </div>
   </main>
+
+  <!-- Product Analysis Modal -->
+  <app-product-analysis-modal
+    [(visible)]="showAnalysisModal"
+    [analysisData]="analysisData"
+    [productName]="currentAnalyzingProduct"
+    [isLoading]="isAnalyzing"
+    (closeModal)="onAnalysisModalClose()">
+  </app-product-analysis-modal>
+
 </div>

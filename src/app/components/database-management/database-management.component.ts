@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { DatabaseService, Database, CreateDatabaseRequest, DatabaseResponse, CreateDatabaseResponse } from '../../services/database.service';
 import { SidebarComponent } from '../shared/sidebar/sidebar.component';
+import { DatabaseUsageComponent } from '../shared/database-usage/database-usage.component';
+import { PlanService, PlanLimits } from '../../services/plan.service';
 
 @Component({
   selector: 'app-database-management',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, SidebarComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, SidebarComponent, DatabaseUsageComponent],
   templateUrl: './database-management.component.html',
   styleUrls: ['./database-management.component.css']
 })
@@ -21,6 +23,10 @@ export class DatabaseManagementComponent implements OnInit {
   showAddForm = false;
   message = '';
   messageType: 'success' | 'error' | '' = '';
+
+  // Plan management properties
+  planLimits: PlanLimits | null = null;
+  canAddDatabase = true;
 
   // Add Database Form Properties
   selectedDbType = '';
@@ -48,7 +54,8 @@ export class DatabaseManagementComponent implements OnInit {
 
   constructor(
     private databaseService: DatabaseService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private planService: PlanService
   ) {
     // Ensure databases is always an array
     this.databases = [];
@@ -63,6 +70,7 @@ export class DatabaseManagementComponent implements OnInit {
   ngOnInit() {
     this.loadDatabases();
     this.initializeAnimations();
+    this.updatePlanLimits();
   }
 
   loadDatabases() {
@@ -98,6 +106,9 @@ export class DatabaseManagementComponent implements OnInit {
         console.log('Final databases array:', this.databases);
         console.log('Number of databases:', this.databases.length);
         this.isLoading = false;
+
+        // Update plan limits after loading databases
+        this.updatePlanLimits();
 
         if (this.databases.length === 0) {
           this.showMessage('No databases found. Create your first database connection!', 'error');
@@ -154,25 +165,10 @@ export class DatabaseManagementComponent implements OnInit {
     }
   }
 
-  toggleAddForm() {
-    this.showAddForm = !this.showAddForm;
-    if (this.showAddForm) {
-      // Close create form if it's open
-      this.showCreateForm = false;
-      // Reset form
-      this.resetAddForm();
-      // Animate the form when it appears
-      setTimeout(() => {
-        const formContainer = document.querySelector('.add-database-form');
-        if (formContainer) {
-          formContainer.classList.add('animated');
-        }
-      }, 50);
-    }
-  }
+
 
   onDatabaseTypeChange() {
-    // Set default port based on database type
+    // Set default values based on database type
     const defaultPorts: { [key: string]: string } = {
       'mysql': '3306',
       'postgresql': '5432',
@@ -182,8 +178,31 @@ export class DatabaseManagementComponent implements OnInit {
       'sqlserver': '1433'
     };
 
+    const defaultHosts: { [key: string]: string } = {
+      'mysql': 'localhost',
+      'postgresql': 'localhost',
+      'mongodb': 'localhost',
+      'sqlite': '',
+      'oracle': 'localhost',
+      'sqlserver': 'localhost'
+    };
+
+    const defaultUsernames: { [key: string]: string } = {
+      'mysql': 'root',
+      'postgresql': 'postgres',
+      'mongodb': 'admin',
+      'sqlite': '',
+      'oracle': 'system',
+      'sqlserver': 'sa'
+    };
+
+    // Set default values
     this.dbForm.port = defaultPorts[this.selectedDbType] || '';
-    this.dbForm.host = this.dbForm.host || 'localhost';
+    this.dbForm.host = defaultHosts[this.selectedDbType] || '';
+    this.dbForm.username = defaultUsernames[this.selectedDbType] || '';
+    this.dbForm.password = ''; // Always empty for security
+
+    console.log('Database type changed to:', this.selectedDbType);
   }
 
   getDefaultHost(): string {
@@ -260,10 +279,10 @@ export class DatabaseManagementComponent implements OnInit {
 
     this.isAddingDatabase = true;
 
-    // Create the database object with appropriate connection string
+    // Create the database object (only using database name, other fields are for display only)
     const newDatabase = {
       databaseType: this.selectedDbType,
-      connectionString: this.getConnectionStringForDatabase(),
+      connectionString: this.getConnectionStringForDatabase(), // Still needed for backend
       databaseName: this.dbForm.databaseName
     };
 
@@ -324,55 +343,14 @@ export class DatabaseManagementComponent implements OnInit {
     return status.charAt(0).toUpperCase() + status.slice(1);
   }
 
-  getFixedConnectionString(): string {
-    return this.FIXED_CONNECTION_STRING;
-  }
-
-  getConnectionStringForType(): string {
-    switch (this.selectedDbType) {
-      case 'mysql':
-        return this.FIXED_CONNECTION_STRING;
-      case 'postgresql':
-        return 'postgresql://username:password@localhost:5432/database_name';
-      case 'mongodb':
-        return 'mongodb://username:password@localhost:27017/database_name';
-      case 'sqlite':
-        return 'sqlite:///path/to/database.db';
-      case 'oracle':
-        return 'oracle://username:password@localhost:1521/database_name';
-      case 'sqlserver':
-        return 'sqlserver://username:password@localhost:1433/database_name';
-      default:
-        return 'Select a database type to see connection string format';
-    }
-  }
-
-  getConnectionStringHint(): string {
-    switch (this.selectedDbType) {
-      case 'mysql':
-        return 'This is the fixed MySQL connection string that will be used';
-      case 'postgresql':
-        return 'Example PostgreSQL connection string format';
-      case 'mongodb':
-        return 'Example MongoDB connection string format';
-      case 'sqlite':
-        return 'SQLite uses local file path';
-      case 'oracle':
-        return 'Example Oracle connection string format';
-      case 'sqlserver':
-        return 'Example SQL Server connection string format';
-      default:
-        return 'Choose a database type to see the connection format';
-    }
-  }
-
   getConnectionStringForDatabase(): string {
     // For MySQL, use the fixed connection string
-    // For other databases, return the example format (in real app, you'd build it properly)
+    // For other databases, return a simple format with just the database name
     if (this.selectedDbType === 'mysql') {
       return this.FIXED_CONNECTION_STRING;
     } else {
-      return this.getConnectionStringForType();
+      // Simple format for other database types (backend will handle the actual connection)
+      return `${this.selectedDbType}://localhost/${this.dbForm.databaseName}`;
     }
   }
 
@@ -571,5 +549,79 @@ export class DatabaseManagementComponent implements OnInit {
         card.classList.add('animated');
       }, index * 100);
     });
+  }
+
+  /**
+   * Update plan limits based on current database count
+   */
+  private updatePlanLimits() {
+    const currentCount = this.databases.length;
+    this.planLimits = this.planService.checkDatabaseLimits(currentCount);
+    this.canAddDatabase = this.planLimits.canAddDatabase;
+
+    console.log('📊 DatabaseManagement: Plan limits updated:', {
+      currentDatabases: currentCount,
+      maxDatabases: this.planLimits.maxDatabases,
+      canAddDatabase: this.canAddDatabase,
+      usagePercentage: this.planLimits.usagePercentage
+    });
+  }
+
+  /**
+   * Check if user can add a new database
+   */
+  canAddNewDatabase(): boolean {
+    return this.canAddDatabase && !this.isAddingDatabase && !this.isTestingConnection;
+  }
+
+  /**
+   * Handle upgrade request from database usage component
+   */
+  onUpgradeRequested() {
+    console.log('📊 DatabaseManagement: Upgrade requested');
+    // The database usage component will handle navigation
+  }
+
+  /**
+   * Show plan limit warning when trying to add database
+   */
+  showPlanLimitWarning() {
+    if (!this.planLimits) return;
+
+    const currentPlan = this.planService.getCurrentPlan();
+    const nextPlan = this.planService.getUpgradeSuggestions(this.databases.length)[0];
+
+    let message = `You've reached your ${currentPlan?.displayName} limit of ${this.planLimits.maxDatabases} database${this.planLimits.maxDatabases > 1 ? 's' : ''}.`;
+
+    if (nextPlan) {
+      message += ` Upgrade to ${nextPlan.displayName} for ${nextPlan.maxDatabases} databases.`;
+    }
+
+    this.showMessage(message, 'error');
+  }
+
+  /**
+   * Toggle add form with plan limit checking
+   */
+  toggleAddForm() {
+    if (!this.canAddNewDatabase()) {
+      this.showPlanLimitWarning();
+      return;
+    }
+
+    this.showAddForm = !this.showAddForm;
+    if (this.showAddForm) {
+      // Close create form if it's open
+      this.showCreateForm = false;
+      // Reset form
+      this.resetAddForm();
+      // Animate the form when it appears
+      setTimeout(() => {
+        const formContainer = document.querySelector('.add-database-form');
+        if (formContainer) {
+          formContainer.classList.add('animated');
+        }
+      }, 50);
+    }
   }
 }

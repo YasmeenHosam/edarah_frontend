@@ -1,0 +1,55 @@
+<div class="dashboard-container">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content">
+    <div class="coming-soon-container">
+      <div class="coming-soon-card">
+        <div class="coming-soon-icon">
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" stroke="currentColor" stroke-width="2"/>
+            <line x1="12" y1="17" x2="12.01" y2="17" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </div>
+        
+        <h1 class="coming-soon-title">Help & Support</h1>
+        <p class="coming-soon-subtitle">Get the Help You Need</p>
+        
+        <div class="coming-soon-description">
+          <p>We're building a comprehensive help center that will include:</p>
+          <ul class="feature-list">
+            <li>📚 Detailed tutorials and guides</li>
+            <li>❓ Frequently asked questions</li>
+            <li>🎥 Video walkthroughs</li>
+            <li>💬 Live chat support</li>
+            <li>📧 Email support system</li>
+          </ul>
+        </div>
+        
+        <div class="coming-soon-status">
+          <div class="status-badge">
+            <span class="status-icon">🚧</span>
+            <span class="status-text">Under Development</span>
+          </div>
+          <p class="status-message">Expected release: Next update</p>
+        </div>
+        
+        <div class="coming-soon-actions">
+          <button class="btn btn-primary" onclick="window.history.back()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Go Back
+          </button>
+          <button class="btn btn-outline" onclick="window.location.reload()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M1 4v6h6M23 20v-6h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Refresh
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

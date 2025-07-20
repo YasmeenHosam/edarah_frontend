@@ -46,6 +46,13 @@ export class AuthComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Check if user is already authenticated
+    if (this.authService.isAuthenticated()) {
+      console.log('🔒 AuthComponent: User is already authenticated, redirecting to dashboard');
+      this.router.navigate(['/dashboard']);
+      return;
+    }
+
     // Check for query parameters to determine initial tab
     this.route.queryParams.subscribe(params => {
       if (params['tab'] === 'signup') {
@@ -225,7 +232,7 @@ export class AuthComponent implements OnInit {
           this.isSigninSubmitting = false;
           this.successMessage = 'Login successful! Redirecting...';
           setTimeout(() => {
-            this.router.navigate(['/home']);
+            this.router.navigate(['/dashboard']);
           }, 1000);
         },
         error: (err) => {

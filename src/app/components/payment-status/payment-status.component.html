@@ -1,0 +1,93 @@
+<div class="payment-status-container">
+  <div class="status-card">
+    <!-- Checking Status -->
+    <div *ngIf="isChecking" class="checking-status">
+      <div class="status-icon">
+        <div class="pulse-loader">
+          <div class="pulse-dot"></div>
+          <div class="pulse-dot"></div>
+          <div class="pulse-dot"></div>
+        </div>
+      </div>
+      
+      <h2>جاري التحقق من حالة الدفع...</h2>
+      <p class="status-message">
+        نتحقق من حالة دفعتك لباقة <strong>{{ pendingPlanName }}</strong>
+      </p>
+      
+      <div class="progress-info">
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width.%]="getProgressPercentage()"></div>
+        </div>
+        <p class="progress-text">
+          محاولة {{ checkAttempts }} من {{ maxAttempts }}
+          ({{ getRemainingTime() }} محاولة متبقية)
+        </p>
+      </div>
+      
+      <div class="status-details">
+        <div class="detail-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+            <polyline points="12,6 12,12 16,14" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <span>يتم التحقق كل 10 ثواني</span>
+        </div>
+        <div class="detail-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>سيتم التحديث تلقائياً عند اكتمال الدفع</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeout Status -->
+    <div *ngIf="!isChecking" class="timeout-status">
+      <div class="timeout-icon">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="10" stroke="#f59e0b" stroke-width="2" fill="#fef3c7"/>
+          <polyline points="12,6 12,12 16,14" stroke="#f59e0b" stroke-width="2"/>
+        </svg>
+      </div>
+      
+      <h2>انتهت مهلة التحقق</h2>
+      <p class="timeout-message">
+        لم نتمكن من التحقق من حالة دفعتك تلقائياً.
+        هذا لا يعني أن الدفع فشل.
+      </p>
+      
+      <div class="timeout-help">
+        <h3>ماذا يمكنك فعله؟</h3>
+        <ul>
+          <li>تحقق من رسائل البريد الإلكتروني للتأكيد</li>
+          <li>راجع كشف حسابك البنكي</li>
+          <li>إذا تم خصم المبلغ، فعّل الباقة يدوياً أدناه</li>
+          <li>تواصل مع الدعم الفني إذا واجهت مشاكل</li>
+        </ul>
+      </div>
+      
+      <div class="timeout-actions">
+        <button class="btn btn-primary" (click)="activatePlanManually()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          تفعيل الباقة يدوياً
+        </button>
+        <button class="btn btn-outline" (click)="cancelAndGoBack()">
+          العودة للرئيسية
+        </button>
+      </div>
+    </div>
+
+    <!-- Manual Testing Section (Development Only) -->
+    <div *ngIf="isChecking" class="testing-section">
+      <div class="testing-divider">
+        <span>للاختبار فقط</span>
+      </div>
+      <button class="btn btn-test" (click)="activatePlanManually()">
+        تفعيل الباقة يدوياً (للاختبار)
+      </button>
+    </div>
+  </div>
+</div>
